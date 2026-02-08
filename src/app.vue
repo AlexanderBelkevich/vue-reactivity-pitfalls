@@ -10,12 +10,7 @@
       <section class="panel panel--wide">
         <CaseDetailHeader />
 
-        <component
-          :is="currentCase.component"
-          v-slot="{ actions, view }"
-        >
-          <CaseDetailGrid :actions="actions" :view-items="view" />
-        </component>
+        <component :is="currentCase.component" />
       </section>
 
       <section class="panel">
@@ -27,7 +22,6 @@
 
 <script setup>
 import CaseList from './components/case-list.vue'
-import CaseDetailGrid from './components/case-detail-grid.vue'
 import CaseDetailHeader from './components/case-detail-header.vue'
 import Hero from './components/hero.vue'
 import LogPanel from './components/log-panel.vue'

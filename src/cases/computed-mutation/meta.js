@@ -62,7 +62,13 @@ export default {
       logList: 'list changed: {{value}}',
     },
   },
-  code: `const sorted = computed(() => list.sort())\n// sort mutates list in-place`,
+  code: `
+import { computed } from 'vue'
+
+const list = reactive([3, 1, 2])
+const sorted = computed(() => list.sort())
+// sort mutates list in-place
+`,
   terms: [
     {
       name: 'computed()',

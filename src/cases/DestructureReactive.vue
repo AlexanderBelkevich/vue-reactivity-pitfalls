@@ -1,14 +1,15 @@
 <script setup>
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
+import { useI18n } from '../i18n.js'
 import { makeView } from './utils.js'
 
 const props = defineProps({
   log: { type: Function, required: true },
-  lang: { type: String, required: true },
 })
 
-const t =
-  props.lang === 'ru'
+const { locale } = useI18n()
+const t = computed(() =>
+  locale.value === 'ru'
     ? {
         logState: 'state.count изменился',
         logLocal:
@@ -17,7 +18,8 @@ const t =
     : {
         logState: 'state.count changed',
         logLocal: 'localCount changed, but UI does not know (state untouched)',
-      }
+      },
+)
 
 const state = reactive({ count: 0 })
 let localCount = state.count
@@ -27,22 +29,22 @@ const view = makeView([
   { label: 'localCount', get: () => localCount },
 ])
 
-const actions = [
+const actions = computed(() => [
   {
     label: 'state.count++',
     run: () => {
       state.count += 1
-      props.log(t.logState)
+      props.log(t.value.logState)
     },
   },
   {
     label: 'localCount++',
     run: () => {
       localCount += 1
-      props.log(t.logLocal)
+      props.log(t.value.logLocal)
     },
   },
-]
+])
 
 defineExpose({ view, actions })
 </script>

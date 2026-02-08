@@ -3,22 +3,22 @@
     <h2>{{ caseText.title }}</h2>
     <p>{{ caseText.summary }}</p>
     <div class="plain">
-      {{ plainLabel }} {{ caseText.plain }}
+      {{ t('case.plainLabel') }} {{ caseText.plain }}
     </div>
   </header>
 </template>
 
 <script setup>
+import { useI18n } from '../i18n.js'
+
 defineProps({
   caseText: {
     type: Object,
     required: true,
   },
-  plainLabel: {
-    type: String,
-    required: true,
-  },
 })
+
+const { t } = useI18n()
 </script>
 
 <style scoped>

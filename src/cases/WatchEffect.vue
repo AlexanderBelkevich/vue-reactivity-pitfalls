@@ -1,14 +1,15 @@
 <script setup>
-import { reactive, watchEffect } from 'vue'
+import { computed, reactive, watchEffect } from 'vue'
+import { useI18n } from '../i18n.js'
 import { makeView } from './utils.js'
 
 const props = defineProps({
   log: { type: Function, required: true },
-  lang: { type: String, required: true },
 })
 
-const t =
-  props.lang === 'ru'
+const { locale } = useI18n()
+const t = computed(() =>
+  locale.value === 'ru'
     ? {
         logEffect: (query, length) =>
           `watchEffect: query=${query}, items=${length}`,
@@ -24,7 +25,8 @@ const t =
         logPush: 'items.push executed',
         setQuery: 'query = "pinia"',
         addItem: 'Add item',
-      }
+      },
+)
 
 const state = reactive({
   query: 'vue',
@@ -32,7 +34,7 @@ const state = reactive({
 })
 
 watchEffect(() => {
-  props.log(t.logEffect(state.query, state.items.length))
+  props.log(t.value.logEffect(state.query, state.items.length))
 })
 
 const view = makeView([
@@ -40,22 +42,22 @@ const view = makeView([
   { label: 'items', get: () => state.items },
 ])
 
-const actions = [
+const actions = computed(() => [
   {
-    label: t.setQuery,
+    label: t.value.setQuery,
     run: () => {
       state.query = 'pinia'
-      props.log(t.logQuery)
+      props.log(t.value.logQuery)
     },
   },
   {
-    label: t.addItem,
+    label: t.value.addItem,
     run: () => {
       state.items.push('pinia')
-      props.log(t.logPush)
+      props.log(t.value.logPush)
     },
   },
-]
+])
 
 defineExpose({ view, actions })
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="case-list">
-    <h3>{{ title }}</h3>
+    <h3>{{ t('case.casesTitle') }}</h3>
     <button
       v-for="item in cases"
       :key="item.id"
@@ -15,6 +15,8 @@
 </template>
 
 <script setup>
+import { useI18n } from '../i18n.js'
+
 defineProps({
   cases: {
     type: Array,
@@ -24,13 +26,11 @@ defineProps({
     type: String,
     required: true,
   },
-  title: {
-    type: String,
-    required: true,
-  },
 })
 
 defineEmits(['select'])
+
+const { t } = useI18n()
 </script>
 
 <style scoped>

@@ -1,9 +1,9 @@
 <template>
   <div class="log-panel">
-    <h3>{{ title }}</h3>
-    <p class="log-hint">{{ hint }}</p>
+    <h3>{{ t('log.title') }}</h3>
+    <p class="log-hint">{{ t('log.hint') }}</p>
     <div class="log-list">
-      <div v-if="!logs.length" class="log-empty">{{ empty }}</div>
+      <div v-if="!logs.length" class="log-empty">{{ t('log.empty') }}</div>
       <div v-for="item in logs" :key="item.id" class="log-item">
         <span class="log-time">{{ formatTime(item.time) }}</span>
         <span class="log-message">{{ item.message }}</span>
@@ -13,32 +13,22 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useI18n } from '../i18n.js'
+
 const props = defineProps({
   logs: {
     type: Array,
     required: true,
   },
-  title: {
-    type: String,
-    required: true,
-  },
-  hint: {
-    type: String,
-    required: true,
-  },
-  empty: {
-    type: String,
-    required: true,
-  },
-  locale: {
-    type: String,
-    required: true,
-  },
 })
+
+const { t, locale } = useI18n()
+const dateLocale = computed(() => (locale.value === 'ru' ? 'ru-RU' : 'en-US'))
 
 const formatTime = (value) => {
   const date = value instanceof Date ? value : new Date(value)
-  return date.toLocaleTimeString(props.locale, {
+  return date.toLocaleTimeString(dateLocale.value, {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',

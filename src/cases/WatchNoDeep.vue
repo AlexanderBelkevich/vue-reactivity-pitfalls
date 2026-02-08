@@ -1,14 +1,15 @@
 <script setup>
-import { reactive, watch } from 'vue'
+import { computed, reactive, watch } from 'vue'
+import { useI18n } from '../i18n.js'
 import { makeView } from './utils.js'
 
 const props = defineProps({
   log: { type: Function, required: true },
-  lang: { type: String, required: true },
 })
 
-const t =
-  props.lang === 'ru'
+const { locale } = useI18n()
+const t = computed(() =>
+  locale.value === 'ru'
     ? {
         logShallow: 'watch (shallow): профиль изменен',
         logDeep: 'watch (deep): внутри что-то поменялось',
@@ -24,7 +25,8 @@ const t =
         replaceProfile: 'Replace profile',
         logPush: 'skills.push executed',
         logReplace: 'profile replaced',
-      }
+      },
+)
 
 const state = reactive({
   profile: { name: 'Ира', skills: ['Vue'] },
@@ -32,12 +34,12 @@ const state = reactive({
 
 watch(
   () => state.profile,
-  () => props.log(t.logShallow),
+  () => props.log(t.value.logShallow),
 )
 
 watch(
   () => state.profile,
-  () => props.log(t.logDeep),
+  () => props.log(t.value.logDeep),
   { deep: true },
 )
 
@@ -46,22 +48,22 @@ const view = makeView([
   { label: 'skills', get: () => state.profile.skills },
 ])
 
-const actions = [
+const actions = computed(() => [
   {
-    label: t.addSkill,
+    label: t.value.addSkill,
     run: () => {
       state.profile.skills.push('Pinia')
-      props.log(t.logPush)
+      props.log(t.value.logPush)
     },
   },
   {
-    label: t.replaceProfile,
+    label: t.value.replaceProfile,
     run: () => {
       state.profile = { name: 'Ира', skills: ['Vue', 'Pinia'] }
-      props.log(t.logReplace)
+      props.log(t.value.logReplace)
     },
   },
-]
+])
 
 defineExpose({ view, actions })
 </script>

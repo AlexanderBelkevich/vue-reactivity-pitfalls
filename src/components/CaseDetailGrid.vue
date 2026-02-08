@@ -57,7 +57,7 @@
           class="terms__item"
         >
           <div class="terms__title">{{ item.name }}</div>
-          <div class="terms__desc">{{ item.desc[lang] }}</div>
+          <div class="terms__desc">{{ item.desc[locale] }}</div>
           <a
             class="terms__link"
             :href="item.link"
@@ -73,7 +73,7 @@
 </template>
 
 <script setup>
-import { inject } from 'vue'
+import { useI18n } from '../i18n.js'
 
 defineProps({
   caseText: {
@@ -96,17 +96,28 @@ defineProps({
     type: Array,
     required: true,
   },
-  lang: {
-    type: String,
-    required: true,
-  },
-  formatValue: {
-    type: Function,
-    required: true,
-  },
 })
 
-const t = inject('t')
+const { t, locale } = useI18n()
+
+const formatValue = (value) => {
+  if (value === null) return 'null'
+  if (value === undefined) return 'undefined'
+  if (typeof value === 'string') return value
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value)
+  if (Array.isArray(value)) {
+    const preview = value.slice(0, 6).join(', ')
+    const totalLabel = t.value('common.arrayTotal')
+    return value.length > 6
+      ? `[${preview}, …] (${totalLabel} ${value.length})`
+      : `[${preview}] (${totalLabel} ${value.length})`
+  }
+  try {
+    return JSON.stringify(value)
+  } catch {
+    return String(value)
+  }
+}
 </script>
 
 <style scoped>

@@ -1,4 +1,4 @@
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 export const defaultLocale = 'ru'
 
@@ -49,7 +49,23 @@ export const messages = {
   },
 }
 
-export function useI18n(localeRef) {
+// Единый ref локали: создаётся в провайдере, доступен через useLocaleProvider / useI18n
+const localeRef = ref(defaultLocale)
+
+/**
+ * Композабл для корня приложения: возвращает реактивную локаль (ref).
+ * Локаль создаётся здесь; корень использует её для v-model переключателя и т.п.
+ */
+export function useLocaleProvider() {
+  return { locale: localeRef }
+}
+
+
+/**
+ * Композабл для любого компонента: возвращает t(key) и текущую локаль.
+ * Локаль берётся из провайдера (useLocaleProvider). Без provide/inject.
+ */
+export function useI18n() {
   const t = computed(
     () => (key) => messages[localeRef.value]?.[key] ?? key,
   )

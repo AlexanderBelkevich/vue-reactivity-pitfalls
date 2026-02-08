@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { inject } from 'vue'
+import { useI18n } from '../i18n.js'
 
 defineProps({
   modelValue: {
@@ -49,7 +49,7 @@ defineProps({
 
 defineEmits(['update:modelValue'])
 
-const t = inject('t')
+const { t } = useI18n()
 </script>
 
 <style scoped>

@@ -1,14 +1,15 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useI18n } from '../i18n.js'
 import { makeView } from './utils.js'
 
 const props = defineProps({
   log: { type: Function, required: true },
-  lang: { type: String, required: true },
 })
 
-const t =
-  props.lang === 'ru'
+const { locale } = useI18n()
+const t = computed(() =>
+  locale.value === 'ru'
     ? {
         logCounter: 'counter.value.value изменен',
         logPlain: 'plainValue изменен отдельно',
@@ -16,7 +17,8 @@ const t =
     : {
         logCounter: 'counter.value.value changed',
         logPlain: 'plainValue changed separately',
-      }
+      },
+)
 
 const counter = ref({ value: 0 })
 let plainValue = counter.value.value
@@ -26,22 +28,22 @@ const view = makeView([
   { label: 'plainValue', get: () => plainValue },
 ])
 
-const actions = [
+const actions = computed(() => [
   {
     label: 'counter.value.value++',
     run: () => {
       counter.value.value += 1
-      props.log(t.logCounter)
+      props.log(t.value.logCounter)
     },
   },
   {
     label: 'plainValue++',
     run: () => {
       plainValue += 1
-      props.log(t.logPlain)
+      props.log(t.value.logPlain)
     },
   },
-]
+])
 
 defineExpose({ view, actions })
 </script>

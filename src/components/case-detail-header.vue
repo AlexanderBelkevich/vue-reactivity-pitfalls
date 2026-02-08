@@ -10,7 +10,7 @@
 
 <script setup>
 import { useI18n } from '../i18n.js'
-import { useCases } from '../useCases.js'
+import { useCases } from '../use-cases.js'
 
 const { t } = useI18n()
 const { caseText } = useCases()

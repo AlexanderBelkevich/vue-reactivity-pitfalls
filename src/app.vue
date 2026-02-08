@@ -26,12 +26,12 @@
 </template>
 
 <script setup>
-import CaseList from './components/CaseList.vue'
-import CaseDetailGrid from './components/CaseDetailGrid.vue'
-import CaseDetailHeader from './components/CaseDetailHeader.vue'
-import Hero from './components/Hero.vue'
-import LogPanel from './components/LogPanel.vue'
-import { useCases } from './useCases.js'
+import CaseList from './components/case-list.vue'
+import CaseDetailGrid from './components/case-detail-grid.vue'
+import CaseDetailHeader from './components/case-detail-header.vue'
+import Hero from './components/hero.vue'
+import LogPanel from './components/log-panel.vue'
+import { useCases } from './use-cases.js'
 
 const { currentCase } = useCases()
 </script>

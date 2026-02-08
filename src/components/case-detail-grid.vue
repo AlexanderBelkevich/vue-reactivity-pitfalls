@@ -75,7 +75,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n } from '../i18n.js'
-import { useCases } from '../useCases.js'
+import { useCases } from '../use-cases.js'
 
 const props = defineProps({
   actions: { type: Array, default: () => [] },

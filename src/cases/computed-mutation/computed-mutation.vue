@@ -1,8 +1,8 @@
 <script setup>
 import { computed, reactive, watch } from 'vue'
-import { useI18n } from '../i18n.js'
-import { useCases } from '../useCases.js'
-import { makeView } from './utils.js'
+import { useI18n } from '../../i18n.js'
+import { useCases } from '../../use-cases.js'
+import { makeView } from '../utils.js'
 
 const { addLog, currentCase } = useCases()
 const { locale } = useI18n()

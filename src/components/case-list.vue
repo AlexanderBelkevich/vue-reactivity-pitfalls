@@ -17,7 +17,7 @@
 
 <script setup>
 import { useI18n } from '../i18n.js'
-import { useCases, useCasesProvider } from '../useCases.js'
+import { useCases, useCasesProvider } from '../use-cases.js'
 
 const { t } = useI18n()
 const { selectedId } = useCasesProvider()

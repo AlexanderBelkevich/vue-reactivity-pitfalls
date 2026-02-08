@@ -10,30 +10,31 @@
     </linearGradient>
   </defs>
   <rect width="1200" height="630" rx="48" fill="url(#bg)" />
-  <rect x="70" y="70" width="1060" height="490" rx="36" fill="#ffffff" opacity="0.85" />
-  <g transform="translate(110 150)">
-    <text x="0" y="0" font-family="Manrope, Arial, sans-serif" font-size="58" font-weight="700" fill="#1f1f1f">
+  <rect x="70" y="70" width="1060" height="490" rx="36" fill="#ffffff" opacity="0.9" />
+
+  <g transform="translate(110 170)" font-family="Arial, Helvetica, sans-serif">
+    <text x="0" y="0" font-size="54" font-weight="700" fill="#1f1f1f">
       Vue Reactivity Pitfalls
     </text>
-    <text x="0" y="70" font-family="Manrope, Arial, sans-serif" font-size="28" font-weight="400" fill="#676767">
-      Interactive sandbox to spot reactivity gotchas
+    <text x="0" y="60" font-size="24" font-weight="400" fill="#676767">
+      Interactive sandbox for Vue 3 reactivity gotchas
     </text>
-    <g transform="translate(0 130)">
-      <rect x="0" y="0" width="310" height="48" rx="24" fill="url(#accent)" />
-      <text x="22" y="32" font-family="Manrope, Arial, sans-serif" font-size="22" font-weight="600" fill="#ffffff">
+    <g transform="translate(0 110)">
+      <rect x="0" y="0" width="290" height="44" rx="22" fill="url(#accent)" />
+      <text x="18" y="30" font-size="20" font-weight="600" fill="#ffffff">
         Vue 3 Playground
       </text>
     </g>
   </g>
-  <g transform="translate(930 150)">
-    <rect width="200" height="200" rx="28" fill="#0d0f12" />
-    <path d="M30 55 L100 165 L170 55" fill="none" stroke="url(#accent)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
-    <circle cx="100" cy="55" r="12" fill="#ffd7b3" />
+
+  <g transform="translate(920 160)">
+    <rect width="210" height="210" rx="28" fill="#0d0f12" />
+    <path d="M30 60 L105 175 L180 60" fill="none" stroke="url(#accent)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="105" cy="60" r="12" fill="#ffd7b3" />
   </g>
-  <text x="110" y="520" font-family="Manrope, Arial, sans-serif" font-size="24" fill="#1f1f1f">
-    by Alexander Belkevich
-  </text>
-  <text x="110" y="560" font-family="Manrope, Arial, sans-serif" font-size="20" fill="#676767">
-    vue-reactivity-pitfalls.netlify.app
-  </text>
+
+  <g transform="translate(110 520)" font-family="Arial, Helvetica, sans-serif">
+    <text x="0" y="0" font-size="22" fill="#1f1f1f">by Alexander Belkevich</text>
+    <text x="0" y="28" font-size="18" fill="#676767">vue-reactivity-pitfalls.netlify.app</text>
+  </g>
 </svg>

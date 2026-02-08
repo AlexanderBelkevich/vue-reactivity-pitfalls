@@ -59,7 +59,7 @@
         <div class="case-grid">
           <div class="card card--wide">
             <h3>{{ ui.codeTitle }}</h3>
-            <pre class="code"><code>{{ currentCase.code }}</code></pre>
+            <div v-html="highlightedCode" class="code"></div>
           </div>
 
           <div class="card card--wide">
@@ -137,12 +137,14 @@ import { computed, effectScope, onMounted, ref, watch } from 'vue'
 import CaseList from './components/CaseList.vue'
 import LogPanel from './components/LogPanel.vue'
 import { cases } from './cases'
+import { codeToHtml, bundledThemes } from 'shiki'
 
 const lang = ref('ru')
 const selectedId = ref(cases[0].id)
 const logs = ref([])
 const viewItems = ref([])
 const actions = ref([])
+const highlightedCode = ref('')
 let scope = null
 
 const ui = computed(() => {
@@ -205,6 +207,13 @@ const caseCards = computed(() =>
   })),
 )
 
+watch(currentCase, async (currentCase) => {
+  highlightedCode.value = await codeToHtml(currentCase.code.trim(), {
+    lang: 'javascript',
+    theme: 'vitesse-dark',
+  })
+}, { immediate: true, deep: true })
+
 const addLog = (message) => {
   logs.value.unshift({
     id: `${Date.now()}-${Math.random()}`,
@@ -234,7 +243,9 @@ const selectCase = (id) => {
 
 watch([selectedId, lang], setupCase)
 
-onMounted(setupCase)
+onMounted(async () => {
+  setupCase()
+})
 
 const formatValue = (value) => {
   if (value === null) return 'null'

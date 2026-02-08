@@ -27,7 +27,7 @@
     </g>
   </g>
 
-  <g transform="translate(920 160)">
+  <g transform="translate(850 160)">
     <rect width="210" height="210" rx="28" fill="#0d0f12" />
     <path d="M30 60 L105 175 L180 60" fill="none" stroke="url(#accent)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
     <circle cx="105" cy="60" r="12" fill="#ffd7b3" />

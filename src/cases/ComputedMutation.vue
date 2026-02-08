@@ -4,26 +4,9 @@ import { useI18n } from '../i18n.js'
 import { useCases } from '../useCases.js'
 import { makeView } from './utils.js'
 
-const { addLog } = useCases()
-
+const { addLog, currentCase } = useCases()
 const { locale } = useI18n()
-const t = computed(() =>
-  locale.value === 'ru'
-    ? {
-        addFour: 'Добавить 4',
-        shuffle: 'Перемешать',
-        logPush: 'list.push(4)',
-        logReplace: 'list заменен',
-        logList: (list) => `list изменен: ${list.join(', ')}`,
-      }
-    : {
-        addFour: 'Add 4',
-        shuffle: 'Shuffle',
-        logPush: 'list.push(4)',
-        logReplace: 'list replaced',
-        logList: (list) => `list changed: ${list.join(', ')}`,
-      },
-)
+const ui = computed(() => currentCase.value.ui?.[locale.value] ?? {})
 
 const state = reactive({ list: [3, 1, 2] })
 const sorted = computed(() => state.list.sort((a, b) => a - b))
@@ -31,7 +14,13 @@ const safeSorted = computed(() => [...state.list].sort((a, b) => a - b))
 
 watch(
   () => state.list,
-  () => addLog(t.value.logList(state.list)),
+  () => {
+    const msg = (ui.value.logList ?? '').replace(
+      '{{value}}',
+      state.list.join(', '),
+    )
+    addLog(msg)
+  },
   { deep: true },
 )
 
@@ -43,17 +32,17 @@ const view = makeView([
 
 const actions = computed(() => [
   {
-    label: t.value.addFour,
+    label: ui.value.addFour,
     run: () => {
       state.list.push(4)
-      addLog(t.value.logPush)
+      addLog(ui.value.logPush)
     },
   },
   {
-    label: t.value.shuffle,
+    label: ui.value.shuffle,
     run: () => {
       state.list = [2, 4, 1, 3]
-      addLog(t.value.logReplace)
+      addLog(ui.value.logReplace)
     },
   },
 ])

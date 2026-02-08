@@ -4,20 +4,9 @@ import { useI18n } from '../i18n.js'
 import { useCases } from '../useCases.js'
 import { makeView } from './utils.js'
 
-const { addLog } = useCases()
-
+const { addLog, currentCase } = useCases()
 const { locale } = useI18n()
-const t = computed(() =>
-  locale.value === 'ru'
-    ? {
-        logCounter: 'counter.value.value изменен',
-        logPlain: 'plainValue изменен отдельно',
-      }
-    : {
-        logCounter: 'counter.value.value changed',
-        logPlain: 'plainValue changed separately',
-      },
-)
+const ui = computed(() => currentCase.value.ui?.[locale.value] ?? {})
 
 const counter = ref({ value: 0 })
 let plainValue = counter.value.value
@@ -32,14 +21,14 @@ const actions = computed(() => [
     label: 'counter.value.value++',
     run: () => {
       counter.value.value += 1
-      addLog(t.value.logCounter)
+      addLog(ui.value.logCounter)
     },
   },
   {
     label: 'plainValue++',
     run: () => {
       plainValue += 1
-      addLog(t.value.logPlain)
+      addLog(ui.value.logPlain)
     },
   },
 ])

@@ -43,6 +43,24 @@ export default {
       ],
     },
   },
+  ui: {
+    ru: {
+      addSkill: 'Добавить skill',
+      replaceProfile: 'Заменить profile',
+      logShallow: 'watch (shallow): профиль изменен',
+      logDeep: 'watch (deep): внутри что-то поменялось',
+      logPush: 'skills.push выполнен',
+      logReplace: 'profile заменен целиком',
+    },
+    en: {
+      addSkill: 'Add skill',
+      replaceProfile: 'Replace profile',
+      logShallow: 'watch (shallow): profile replaced',
+      logDeep: 'watch (deep): nested change detected',
+      logPush: 'skills.push executed',
+      logReplace: 'profile replaced',
+    },
+  },
   code: `watch(() => state.profile, () => log('shallow'))\nwatch(() => state.profile, () => log('deep'), { deep: true })`,
   terms: [
     {

@@ -4,28 +4,9 @@ import { useI18n } from '../i18n.js'
 import { useCases } from '../useCases.js'
 import { makeView } from './utils.js'
 
-const { addLog } = useCases()
-
+const { addLog, currentCase } = useCases()
 const { locale } = useI18n()
-const t = computed(() =>
-  locale.value === 'ru'
-    ? {
-        logEffect: (query, length) =>
-          `watchEffect: query=${query}, items=${length}`,
-        logQuery: 'query изменен',
-        logPush: 'items.push выполнен',
-        setQuery: 'query = "pinia"',
-        addItem: 'Добавить item',
-      }
-    : {
-        logEffect: (query, length) =>
-          `watchEffect: query=${query}, items=${length}`,
-        logQuery: 'query changed',
-        logPush: 'items.push executed',
-        setQuery: 'query = "pinia"',
-        addItem: 'Add item',
-      },
-)
+const ui = computed(() => currentCase.value.ui?.[locale.value] ?? {})
 
 const state = reactive({
   query: 'vue',
@@ -33,7 +14,10 @@ const state = reactive({
 })
 
 watchEffect(() => {
-  addLog(t.value.logEffect(state.query, state.items.length))
+  const msg = (ui.value.logEffect ?? '')
+    .replace('{{query}}', state.query)
+    .replace('{{length}}', String(state.items.length))
+  addLog(msg)
 })
 
 const view = makeView([
@@ -43,17 +27,17 @@ const view = makeView([
 
 const actions = computed(() => [
   {
-    label: t.value.setQuery,
+    label: ui.value.setQuery,
     run: () => {
       state.query = 'pinia'
-      addLog(t.value.logQuery)
+      addLog(ui.value.logQuery)
     },
   },
   {
-    label: t.value.addItem,
+    label: ui.value.addItem,
     run: () => {
       state.items.push('pinia')
-      addLog(t.value.logPush)
+      addLog(ui.value.logPush)
     },
   },
 ])

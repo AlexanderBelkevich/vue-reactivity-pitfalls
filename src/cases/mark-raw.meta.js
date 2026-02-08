@@ -42,6 +42,22 @@ export default {
       ],
     },
   },
+  ui: {
+    ru: {
+      setTheme: 'theme = dark',
+      replace: 'Заменить config',
+      logTheme: 'theme изменен: {{theme}}',
+      logNoWatch: 'theme установлен на dark (watch не сработает)',
+      logReplace: 'config заменен целиком',
+    },
+    en: {
+      setTheme: 'theme = dark',
+      replace: 'Replace config',
+      logTheme: 'theme changed: {{theme}}',
+      logNoWatch: 'theme set to dark (watch will not fire)',
+      logReplace: 'config replaced',
+    },
+  },
   code: `const rawConfig = markRaw({ theme: 'light' })\nconst state = reactive({ config: rawConfig })`,
   terms: [
     {

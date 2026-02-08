@@ -43,6 +43,26 @@ export default {
       ],
     },
   },
+  ui: {
+    ru: {
+      noTrigger: 'count++ (без triggerRef)',
+      trigger: 'triggerRef(data)',
+      replace: 'Заменить объект',
+      logSilent: 'count изменен, но watch молчит',
+      logTrigger: 'triggerRef вызван',
+      logReplace: 'data.value заменен',
+      logWatch: 'watch: count={{count}}',
+    },
+    en: {
+      noTrigger: 'count++ (no triggerRef)',
+      trigger: 'triggerRef(data)',
+      replace: 'Replace object',
+      logSilent: 'count changed, but watch is silent',
+      logTrigger: 'triggerRef called',
+      logReplace: 'data.value replaced',
+      logWatch: 'watch: count={{count}}',
+    },
+  },
   code: `const data = shallowRef({ count: 0 })\n// data.value.count++ does not trigger\ntriggerRef(data)`,
   terms: [
     {

@@ -57,6 +57,17 @@ const { count } = state
 state.count++ // UI updates
 // count does not change
 `,
+  ui: {
+    ru: {
+      logState: 'state.count изменился',
+      logLocal:
+        'localCount изменился, но UI не знает об этом (state не тронут)',
+    },
+    en: {
+      logState: 'state.count changed',
+      logLocal: 'localCount changed, but UI does not know (state untouched)',
+    },
+  },
   terms: [
     {
       name: 'reactive()',

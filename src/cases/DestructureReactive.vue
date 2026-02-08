@@ -4,21 +4,9 @@ import { useI18n } from '../i18n.js'
 import { useCases } from '../useCases.js'
 import { makeView } from './utils.js'
 
-const { addLog } = useCases()
-
+const { addLog, currentCase } = useCases()
 const { locale } = useI18n()
-const t = computed(() =>
-  locale.value === 'ru'
-    ? {
-        logState: 'state.count изменился',
-        logLocal:
-          'localCount изменился, но UI не знает об этом (state не тронут)',
-      }
-    : {
-        logState: 'state.count changed',
-        logLocal: 'localCount changed, but UI does not know (state untouched)',
-      },
-)
+const ui = computed(() => currentCase.value.ui?.[locale.value] ?? {})
 
 const state = reactive({ count: 0 })
 let localCount = state.count
@@ -33,14 +21,14 @@ const actions = computed(() => [
     label: 'state.count++',
     run: () => {
       state.count += 1
-      addLog(t.value.logState)
+      addLog(ui.value.logState)
     },
   },
   {
     label: 'localCount++',
     run: () => {
       localCount += 1
-      addLog(t.value.logLocal)
+      addLog(ui.value.logLocal)
     },
   },
 ])

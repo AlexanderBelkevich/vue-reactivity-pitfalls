@@ -46,6 +46,16 @@ export default {
       ],
     },
   },
+  ui: {
+    ru: {
+      logCounter: 'counter.value.value изменен',
+      logPlain: 'plainValue изменен отдельно',
+    },
+    en: {
+      logCounter: 'counter.value.value changed',
+      logPlain: 'plainValue changed separately',
+    },
+  },
   code: `const counter = ref({ value: 0 })\nconst { value } = counter.value\n\ncounter.value.value++ // value does not change`,
   terms: [
     {

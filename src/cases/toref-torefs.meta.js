@@ -42,6 +42,16 @@ export default {
       ],
     },
   },
+  ui: {
+    ru: {
+      logA: 'aRef и state.a синхронизированы',
+      logB: 'state.b изменился, но b (plain) нет',
+    },
+    en: {
+      logA: 'aRef and state.a stay in sync',
+      logB: 'state.b changed, but b (plain) did not',
+    },
+  },
   code: `const state = reactive({ a: 1, b: 2 })\nconst aRef = toRef(state, 'a')\nconst { b } = state // plain value\n\naRef.value++ // state.a changes`,
   terms: [
     {

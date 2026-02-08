@@ -50,6 +50,22 @@ export default {
       ],
     },
   },
+  ui: {
+    ru: {
+      logEffect: 'watchEffect: query={{query}}, items={{length}}',
+      logQuery: 'query изменен',
+      logPush: 'items.push выполнен',
+      setQuery: 'query = "pinia"',
+      addItem: 'Добавить item',
+    },
+    en: {
+      logEffect: 'watchEffect: query={{query}}, items={{length}}',
+      logQuery: 'query changed',
+      logPush: 'items.push executed',
+      setQuery: 'query = "pinia"',
+      addItem: 'Add item',
+    },
+  },
   code: `watchEffect(() => {\n  log(state.query)\n  log(state.items.length)\n})`,
   terms: [
     {

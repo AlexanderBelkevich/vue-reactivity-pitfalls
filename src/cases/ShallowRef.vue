@@ -4,36 +4,21 @@ import { useI18n } from '../i18n.js'
 import { useCases } from '../useCases.js'
 import { makeView } from './utils.js'
 
-const { addLog } = useCases()
-
+const { addLog, currentCase } = useCases()
 const { locale } = useI18n()
-const t = computed(() =>
-  locale.value === 'ru'
-    ? {
-        noTrigger: 'count++ (без triggerRef)',
-        trigger: 'triggerRef(data)',
-        replace: 'Заменить объект',
-        logSilent: 'count изменен, но watch молчит',
-        logTrigger: 'triggerRef вызван',
-        logReplace: 'data.value заменен',
-        logWatch: (count) => `watch: count=${count}`,
-      }
-    : {
-        noTrigger: 'count++ (no triggerRef)',
-        trigger: 'triggerRef(data)',
-        replace: 'Replace object',
-        logSilent: 'count changed, but watch is silent',
-        logTrigger: 'triggerRef called',
-        logReplace: 'data.value replaced',
-        logWatch: (count) => `watch: count=${count}`,
-      },
-)
+const ui = computed(() => currentCase.value.ui?.[locale.value] ?? {})
 
 const data = shallowRef({ count: 0 })
 
 watch(
   data,
-  () => addLog(t.value.logWatch(data.value.count)),
+  () => {
+    const msg = (ui.value.logWatch ?? '').replace(
+      '{{count}}',
+      String(data.value.count),
+    )
+    addLog(msg)
+  },
   { deep: true },
 )
 
@@ -43,24 +28,24 @@ const view = makeView([
 
 const actions = computed(() => [
   {
-    label: t.value.noTrigger,
+    label: ui.value.noTrigger,
     run: () => {
       data.value.count += 1
-      addLog(t.value.logSilent)
+      addLog(ui.value.logSilent)
     },
   },
   {
-    label: t.value.trigger,
+    label: ui.value.trigger,
     run: () => {
       triggerRef(data)
-      addLog(t.value.logTrigger)
+      addLog(ui.value.logTrigger)
     },
   },
   {
-    label: t.value.replace,
+    label: ui.value.replace,
     run: () => {
       data.value = { count: data.value.count + 1 }
-      addLog(t.value.logReplace)
+      addLog(ui.value.logReplace)
     },
   },
 ])

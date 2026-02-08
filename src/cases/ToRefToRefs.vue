@@ -4,20 +4,9 @@ import { useI18n } from '../i18n.js'
 import { useCases } from '../useCases.js'
 import { makeView } from './utils.js'
 
-const { addLog } = useCases()
-
+const { addLog, currentCase } = useCases()
 const { locale } = useI18n()
-const t = computed(() =>
-  locale.value === 'ru'
-    ? {
-        logA: 'aRef и state.a синхронизированы',
-        logB: 'state.b изменился, но b (plain) нет',
-      }
-    : {
-        logA: 'aRef and state.a stay in sync',
-        logB: 'state.b changed, but b (plain) did not',
-      },
-)
+const ui = computed(() => currentCase.value.ui?.[locale.value] ?? {})
 
 const state = reactive({ a: 1, b: 2 })
 const aRef = toRef(state, 'a')
@@ -35,14 +24,14 @@ const actions = computed(() => [
     label: 'aRef.value++',
     run: () => {
       aRef.value += 1
-      addLog(t.value.logA)
+      addLog(ui.value.logA)
     },
   },
   {
     label: 'state.b++',
     run: () => {
       state.b += 1
-      addLog(t.value.logB)
+      addLog(ui.value.logB)
     },
   },
 ])

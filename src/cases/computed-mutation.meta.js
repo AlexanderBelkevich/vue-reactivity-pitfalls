@@ -46,6 +46,22 @@ export default {
       ],
     },
   },
+  ui: {
+    ru: {
+      addFour: 'Добавить 4',
+      shuffle: 'Перемешать',
+      logPush: 'list.push(4)',
+      logReplace: 'list заменен',
+      logList: 'list изменен: {{value}}',
+    },
+    en: {
+      addFour: 'Add 4',
+      shuffle: 'Shuffle',
+      logPush: 'list.push(4)',
+      logReplace: 'list replaced',
+      logList: 'list changed: {{value}}',
+    },
+  },
   code: `const sorted = computed(() => list.sort())\n// sort mutates list in-place`,
   terms: [
     {

@@ -1,9 +1,3 @@
-import {
-  reactive,
-} from 'vue'
-
-const makeView = (items) => items.map((item) => ({ label: item.label, get: item.get }))
-
 export default {
   id: 'destructure-reactive',
   short: {
@@ -13,13 +7,14 @@ export default {
   text: {
     ru: {
       title: 'Деструктуризация reactive',
-      summary: 'Сами по себе поля reactive не являются реактивными. Vue отслежитвает обращение к полю в reactive, но не само значение которое там хранится. Когда мы используем деструктуризацию, то мы читаем значение, а дальше оно уже не связано с reactive. И если в случае с объектом, его поля останутся реактивными, то извлекая примитивные значения, мы теряем реактивность.',
+      summary:
+        'Сами по себе поля reactive не являются реактивными. Vue отследитвает обращение к полю в reactive, но не само значение которое там хранится. Когда мы используем деструктуризацию, то мы читаем значение, а дальше оно уже не связано с reactive. И если в случае с объектом, его поля останутся реактивными, то извлекая примитивные значения, мы теряем реактивность.',
       plain:
         'Если применить деструктуризацию к поляем в reactive, то можно потерять реактивность.',
       steps: [
-        'Нажми “state.count++” и увидишь, что localCount не меняется.',
-        'Нажми “localCount++” — state.count останется прежним.',
-        'Снова “state.count++” — localCount обновится из-за ререндера.',
+        'Нажми "state.count++" и увидишь, что localCount не меняется.',
+        'Нажми "localCount++" — state.count останется прежним.',
+        'Снова "state.count++" — localCount обновится из-за ререндера.',
       ],
       expected:
         'localCount меняется, но UI узнает об этом только при другом ререндере.',
@@ -36,12 +31,11 @@ export default {
     en: {
       title: 'Destructuring reactive',
       summary: 'When you destructure a reactive object, the reactive link is lost.',
-      plain:
-        'The value becomes a plain variable and is no longer tied to state.',
+      plain: 'The value becomes a plain variable and is no longer tied to state.',
       steps: [
-        'Click “state.count++” — localCount does not change.',
-        'Click “localCount++” — state.count stays the same.',
-        'Click “state.count++” again — localCount updates due to a rerender.',
+        'Click "state.count++" — localCount does not change.',
+        'Click "localCount++" — state.count stays the same.',
+        'Click "state.count++" again — localCount updates due to a rerender.',
       ],
       expected:
         'localCount changes, but the UI only sees it after a different rerender.',
@@ -59,7 +53,7 @@ export default {
   code: `
 const state = reactive({ count: 0 })
 const { count } = state
-1
+
 state.count++ // UI updates
 // count does not change
 `,
@@ -81,42 +75,4 @@ state.count++ // UI updates
       link: 'https://vuejs.org/api/reactivity-utilities.html#torefs',
     },
   ],
-  create({ log, lang }) {
-    const t =
-      lang === 'ru'
-        ? {
-            logState: 'state.count изменился',
-            logLocal: 'localCount изменился, но UI не знает об этом (state не тронут)',
-          }
-        : {
-            logState: 'state.count changed',
-            logLocal: 'localCount changed, but UI does not know (state untouched)',
-          }
-
-    const state = reactive({ count: 0 })
-    let localCount = state.count
-
-    return {
-      view: makeView([
-        { label: 'state.count', get: () => state.count },
-        { label: 'localCount', get: () => localCount },
-      ]),
-      actions: [
-        {
-          label: 'state.count++',
-          run: () => {
-            state.count += 1
-            log(t.logState)
-          },
-        },
-        {
-          label: 'localCount++',
-          run: () => {
-            localCount += 1
-            log(t.logLocal)
-          },
-        },
-      ],
-    }
-  },
 }

@@ -56,6 +56,16 @@
           </div>
         </header>
 
+        <div class="case-logic-host" aria-hidden="true">
+          <component
+            :is="currentCase.component"
+            ref="caseRef"
+            :log="addLog"
+            :lang="lang"
+            :key="`${selectedId}-${lang}`"
+          />
+        </div>
+
         <div class="case-grid">
           <div class="card card--wide">
             <h3>{{ ui.codeTitle }}</h3>
@@ -133,11 +143,11 @@
 </template>
 
 <script setup>
-import { computed, effectScope, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import CaseList from './components/CaseList.vue'
 import LogPanel from './components/LogPanel.vue'
 import { cases } from './cases'
-import { codeToHtml, bundledThemes } from 'shiki'
+import { codeToHtml } from 'shiki'
 
 const lang = ref('ru')
 const selectedId = ref(cases[0].id)
@@ -145,7 +155,7 @@ const logs = ref([])
 const viewItems = ref([])
 const actions = ref([])
 const highlightedCode = ref('')
-let scope = null
+const caseRef = ref(null)
 
 const ui = computed(() => {
   const labels = {
@@ -207,12 +217,30 @@ const caseCards = computed(() =>
   })),
 )
 
-watch(currentCase, async (currentCase) => {
-  highlightedCode.value = await codeToHtml(currentCase.code.trim(), {
+watch(currentCase, async (c) => {
+  highlightedCode.value = await codeToHtml(c.code.trim(), {
     lang: 'javascript',
     theme: 'vitesse-dark',
   })
 }, { immediate: true, deep: true })
+
+watch(selectedId, () => {
+  logs.value = []
+})
+
+watch(
+  caseRef,
+  (ref) => {
+    if (ref?.view) {
+      viewItems.value = ref.view
+      actions.value = ref.actions
+    } else {
+      viewItems.value = []
+      actions.value = []
+    }
+  },
+  { flush: 'post' },
+)
 
 const addLog = (message) => {
   logs.value.unshift({
@@ -222,30 +250,9 @@ const addLog = (message) => {
   })
 }
 
-const setupCase = () => {
-  if (scope) scope.stop()
-  logs.value = []
-  viewItems.value = []
-  actions.value = []
-
-  scope = effectScope()
-  scope.run(() => {
-    const instance = currentCase.value.create({ log: addLog, lang: lang.value })
-    viewItems.value = instance.view
-    actions.value = instance.actions
-    if (instance.init) instance.init()
-  })
-}
-
 const selectCase = (id) => {
   selectedId.value = id
 }
-
-watch([selectedId, lang], setupCase)
-
-onMounted(async () => {
-  setupCase()
-})
 
 const formatValue = (value) => {
   if (value === null) return 'null'
@@ -265,3 +272,299 @@ const formatValue = (value) => {
   }
 }
 </script>
+
+<style scoped>
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 72px;
+}
+
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.hero__text {
+  max-width: 640px;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 3vw, 3.4rem);
+  letter-spacing: -0.02em;
+  margin: 12px 0 12px;
+}
+
+.hero p {
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.lang-toggle {
+  margin-top: 16px;
+  display: inline-flex;
+  gap: 8px;
+  background: var(--card);
+  padding: 6px;
+  border-radius: 999px;
+  border: 1px solid var(--stroke);
+}
+
+.lang-btn {
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.lang-btn--active {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 8px 14px rgba(255, 107, 53, 0.25);
+}
+
+.author {
+  margin-top: 18px;
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #fffdf8;
+  border: 1px solid var(--stroke);
+  max-width: 320px;
+}
+
+.author__label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.author__name {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.author__link {
+  color: var(--accent-dark);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.author__link:hover {
+  text-decoration: underline;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr 260px;
+  gap: 20px;
+}
+
+.panel {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--stroke);
+}
+
+.panel--wide {
+  padding: 24px;
+}
+
+.case-header h2 {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+}
+
+.case-header p {
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+.plain {
+  background: #fff6e5;
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.case-logic-host {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.case-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--card-alt);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--stroke);
+}
+
+.card h3 {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.card--wide {
+  grid-column: 1 / -1;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 600;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 10px 18px rgba(255, 107, 53, 0.25);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px rgba(255, 107, 53, 0.32);
+}
+
+.state-list {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.state-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.state-label {
+  color: var(--muted);
+}
+
+.state-value {
+  font-weight: 600;
+}
+
+.code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  background: #0d0f12;
+  color: #f7f2e8;
+  padding: 12px;
+  border-radius: 12px;
+  min-height: 140px;
+}
+
+.notes {
+  list-style: disc;
+  padding-left: 18px;
+  color: var(--muted);
+  display: grid;
+  gap: 8px;
+}
+
+.steps {
+  padding-left: 18px;
+  color: var(--muted);
+  display: grid;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.expected {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #fff6e5;
+  border: 1px solid var(--stroke);
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.expected span {
+  font-weight: 600;
+  margin-right: 6px;
+  color: var(--accent-dark);
+}
+
+.terms {
+  display: grid;
+  gap: 10px;
+}
+
+.terms__item {
+  background: #fffdf8;
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid var(--stroke);
+  display: grid;
+  gap: 6px;
+}
+
+.terms__title {
+  font-weight: 700;
+}
+
+.terms__desc {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.terms__link {
+  color: var(--accent-dark);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.terms__link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 980px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    order: 0;
+  }
+}
+</style>

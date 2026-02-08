@@ -1,10 +1,3 @@
-import {
-  reactive,
-  watchEffect,
-} from 'vue'
-
-const makeView = (items) => items.map((item) => ({ label: item.label, get: item.get }))
-
 export default {
   id: 'watch-effect',
   short: {
@@ -19,8 +12,8 @@ export default {
         'watchEffect следит за всем, что прочитал внутри функции — иногда слишком много.',
       steps: [
         'Сразу после открытия кейса watchEffect уже сработал.',
-        'Нажми “query = pinia” — effect сработает снова.',
-        'Нажми “Добавить item” — снова сработает из-за items.length.',
+        'Нажми "query = pinia" — effect сработает снова.',
+        'Нажми "Добавить item" — снова сработает из-за items.length.',
       ],
       expected:
         'watchEffect запускается сразу и реагирует на все зависимости внутри функции.',
@@ -41,8 +34,8 @@ export default {
         'watchEffect reacts to every value read inside the function, even accidental ones.',
       steps: [
         'Right after opening, watchEffect already ran once.',
-        'Click “query = pinia” — it runs again.',
-        'Click “Add item” — it runs again because of items.length.',
+        'Click "query = pinia" — it runs again.',
+        'Click "Add item" — it runs again because of items.length.',
       ],
       expected:
         'watchEffect runs immediately and reacts to all dependencies inside the function.',
@@ -76,56 +69,4 @@ export default {
       link: 'https://vuejs.org/api/reactivity-core.html#watch',
     },
   ],
-  create({ log, lang }) {
-    const t =
-      lang === 'ru'
-        ? {
-            logEffect: (query, length) =>
-              `watchEffect: query=${query}, items=${length}`,
-            logQuery: 'query изменен',
-            logPush: 'items.push выполнен',
-            setQuery: 'query = "pinia"',
-            addItem: 'Добавить item',
-          }
-        : {
-            logEffect: (query, length) =>
-              `watchEffect: query=${query}, items=${length}`,
-            logQuery: 'query changed',
-            logPush: 'items.push executed',
-            setQuery: 'query = "pinia"',
-            addItem: 'Add item',
-          }
-
-    const state = reactive({
-      query: 'vue',
-      items: ['vue', 'reactivity', 'watch'],
-    })
-
-    watchEffect(() => {
-      log(t.logEffect(state.query, state.items.length))
-    })
-
-    return {
-      view: makeView([
-        { label: 'query', get: () => state.query },
-        { label: 'items', get: () => state.items },
-      ]),
-      actions: [
-        {
-          label: t.setQuery,
-          run: () => {
-            state.query = 'pinia'
-            log(t.logQuery)
-          },
-        },
-        {
-          label: t.addItem,
-          run: () => {
-            state.items.push('pinia')
-            log(t.logPush)
-          },
-        },
-      ],
-    }
-  },
 }

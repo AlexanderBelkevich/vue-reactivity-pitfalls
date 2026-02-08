@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   logs: {
     type: Array,
     required: true,
@@ -38,10 +38,57 @@ defineProps({
 
 const formatTime = (value) => {
   const date = value instanceof Date ? value : new Date(value)
-  return date.toLocaleTimeString(locale, {
+  return date.toLocaleTimeString(props.locale, {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
   })
 }
 </script>
+
+<style scoped>
+.log-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.log-panel h3 {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.log-hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.log-list {
+  display: grid;
+  gap: 8px;
+}
+
+.log-item {
+  background: #fdf7ee;
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid var(--stroke);
+  font-size: 0.85rem;
+}
+
+.log-time {
+  font-family: 'JetBrains Mono', monospace;
+  margin-right: 6px;
+  color: var(--accent-dark);
+}
+
+.log-empty {
+  color: var(--muted);
+  padding: 10px;
+  border: 1px dashed var(--stroke);
+  border-radius: 10px;
+}
+</style>

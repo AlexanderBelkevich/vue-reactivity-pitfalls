@@ -1,10 +1,3 @@
-import {
-  reactive,
-  toRef,
-} from 'vue'
-
-const makeView = (items) => items.map((item) => ({ label: item.label, get: item.get }))
-
 export default {
   id: 'toref-torefs',
   short: {
@@ -17,8 +10,8 @@ export default {
       summary: 'toRef и toRefs сохраняют связь с reactive, деструктуризация — нет.',
       plain: 'toRef связывает переменную с полем объекта. Деструктуризация — копия.',
       steps: [
-        'Нажми “aRef.value++” — state.a меняется вместе с aRef.',
-        'Нажми “state.b++” — b (plain) не меняется.',
+        'Нажми "aRef.value++" — state.a меняется вместе с aRef.',
+        'Нажми "state.b++" — b (plain) не меняется.',
       ],
       expected: 'toRef сохраняет связь с reactive, а деструктуризация — нет.',
       checklist: [
@@ -35,8 +28,8 @@ export default {
       summary: 'toRef and toRefs keep the link to reactive, destructuring does not.',
       plain: 'toRef links a variable to a field. Destructuring is just a copy.',
       steps: [
-        'Click “aRef.value++” — state.a changes with aRef.',
-        'Click “state.b++” — b (plain) stays the same.',
+        'Click "aRef.value++" — state.a changes with aRef.',
+        'Click "state.b++" — b (plain) stays the same.',
       ],
       expected: 'toRef keeps the link to reactive, destructuring does not.',
       checklist: [
@@ -68,45 +61,4 @@ export default {
       link: 'https://vuejs.org/api/reactivity-core.html#reactive',
     },
   ],
-  create({ log, lang }) {
-    const t =
-      lang === 'ru'
-        ? {
-            logA: 'aRef и state.a синхронизированы',
-            logB: 'state.b изменился, но b (plain) нет',
-          }
-        : {
-            logA: 'aRef and state.a stay in sync',
-            logB: 'state.b changed, but b (plain) did not',
-          }
-
-    const state = reactive({ a: 1, b: 2 })
-    const aRef = toRef(state, 'a')
-    const { b } = state
-
-    return {
-      view: makeView([
-        { label: 'state.a', get: () => state.a },
-        { label: 'aRef.value', get: () => aRef.value },
-        { label: 'state.b', get: () => state.b },
-        { label: 'b (plain)', get: () => b },
-      ]),
-      actions: [
-        {
-          label: 'aRef.value++',
-          run: () => {
-            aRef.value += 1
-            log(t.logA)
-          },
-        },
-        {
-          label: 'state.b++',
-          run: () => {
-            state.b += 1
-            log(t.logB)
-          },
-        },
-      ],
-    }
-  },
 }

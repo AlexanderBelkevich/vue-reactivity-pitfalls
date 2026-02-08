@@ -1,10 +1,3 @@
-import {
-  reactive,
-  watch,
-} from 'vue'
-
-const makeView = (items) => items.map((item) => ({ label: item.label, get: item.get }))
-
 export default {
   id: 'watch-no-deep',
   short: {
@@ -17,8 +10,8 @@ export default {
       summary: 'watch по объекту без deep реагирует на ссылку, а не на поля.',
       plain: 'Пока ссылка та же, watch молчит. Срабатывает при замене объекта.',
       steps: [
-        'Нажми “Добавить skill” — сработает только deep.',
-        'Нажми “Заменить profile” — сработают оба.',
+        'Нажми "Добавить skill" — сработает только deep.',
+        'Нажми "Заменить profile" — сработают оба.',
       ],
       expected: 'Shallow watch ловит только смену ссылки, deep — изменения внутри.',
       checklist: [
@@ -35,10 +28,11 @@ export default {
       summary: 'watch on an object without deep reacts to the reference, not fields.',
       plain: 'Same reference — watch is silent. It fires on object replacement.',
       steps: [
-        'Click “Add skill” — only deep watch fires.',
-        'Click “Replace profile” — both fire.',
+        'Click "Add skill" — only deep watch fires.',
+        'Click "Replace profile" — both fire.',
       ],
-      expected: 'Shallow watch catches reference changes; deep catches nested changes.',
+      expected:
+        'Shallow watch catches reference changes; deep catches nested changes.',
       checklist: [
         'Expecting nested changes without deep.',
         'Using deep where replacing the object is simpler.',
@@ -68,62 +62,4 @@ export default {
       link: 'https://vuejs.org/api/reactivity-core.html#watch',
     },
   ],
-  create({ log, lang }) {
-    const t =
-      lang === 'ru'
-        ? {
-            logShallow: 'watch (shallow): профиль изменен',
-            logDeep: 'watch (deep): внутри что-то поменялось',
-            addSkill: 'Добавить skill',
-            replaceProfile: 'Заменить profile',
-            logPush: 'skills.push выполнен',
-            logReplace: 'profile заменен целиком',
-          }
-        : {
-            logShallow: 'watch (shallow): profile replaced',
-            logDeep: 'watch (deep): nested change detected',
-            addSkill: 'Add skill',
-            replaceProfile: 'Replace profile',
-            logPush: 'skills.push executed',
-            logReplace: 'profile replaced',
-          }
-
-    const state = reactive({
-      profile: { name: 'Ира', skills: ['Vue'] },
-    })
-
-    watch(
-      () => state.profile,
-      () => log(t.logShallow),
-    )
-
-    watch(
-      () => state.profile,
-      () => log(t.logDeep),
-      { deep: true },
-    )
-
-    return {
-      view: makeView([
-        { label: 'name', get: () => state.profile.name },
-        { label: 'skills', get: () => state.profile.skills },
-      ]),
-      actions: [
-        {
-          label: t.addSkill,
-          run: () => {
-            state.profile.skills.push('Pinia')
-            log(t.logPush)
-          },
-        },
-        {
-          label: t.replaceProfile,
-          run: () => {
-            state.profile = { name: 'Ира', skills: ['Vue', 'Pinia'] }
-            log(t.logReplace)
-          },
-        },
-      ],
-    }
-  },
 }

@@ -15,15 +15,10 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n } from '../i18n.js'
-
-const props = defineProps({
-  logs: {
-    type: Array,
-    required: true,
-  },
-})
+import { useCases } from '../useCases.js'
 
 const { t, locale } = useI18n()
+const { logs } = useCases()
 const dateLocale = computed(() => (locale.value === 'ru' ? 'ru-RU' : 'en-US'))
 
 const formatTime = (value) => {

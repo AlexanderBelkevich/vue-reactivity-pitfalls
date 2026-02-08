@@ -1,11 +1,10 @@
 <script setup>
 import { computed, reactive, watch } from 'vue'
 import { useI18n } from '../i18n.js'
+import { useCases } from '../useCases.js'
 import { makeView } from './utils.js'
 
-const props = defineProps({
-  log: { type: Function, required: true },
-})
+const { addLog } = useCases()
 
 const { locale } = useI18n()
 const t = computed(() =>
@@ -34,12 +33,12 @@ const state = reactive({
 
 watch(
   () => state.profile,
-  () => props.log(t.value.logShallow),
+  () => addLog(t.value.logShallow),
 )
 
 watch(
   () => state.profile,
-  () => props.log(t.value.logDeep),
+  () => addLog(t.value.logDeep),
   { deep: true },
 )
 
@@ -53,14 +52,14 @@ const actions = computed(() => [
     label: t.value.addSkill,
     run: () => {
       state.profile.skills.push('Pinia')
-      props.log(t.value.logPush)
+      addLog(t.value.logPush)
     },
   },
   {
     label: t.value.replaceProfile,
     run: () => {
       state.profile = { name: 'Ира', skills: ['Vue', 'Pinia'] }
-      props.log(t.value.logReplace)
+      addLog(t.value.logReplace)
     },
   },
 ])

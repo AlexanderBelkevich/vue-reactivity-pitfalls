@@ -10,15 +10,10 @@
 
 <script setup>
 import { useI18n } from '../i18n.js'
-
-defineProps({
-  caseText: {
-    type: Object,
-    required: true,
-  },
-})
+import { useCases } from '../useCases.js'
 
 const { t } = useI18n()
+const { caseText } = useCases()
 </script>
 
 <style scoped>

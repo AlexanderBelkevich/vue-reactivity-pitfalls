@@ -1,11 +1,10 @@
 <script setup>
 import { computed, isReactive, markRaw, reactive, watch } from 'vue'
 import { useI18n } from '../i18n.js'
+import { useCases } from '../useCases.js'
 import { makeView } from './utils.js'
 
-const props = defineProps({
-  log: { type: Function, required: true },
-})
+const { addLog } = useCases()
 
 const { locale } = useI18n()
 const t = computed(() =>
@@ -31,7 +30,7 @@ const state = reactive({ config: rawConfig })
 
 watch(
   () => state.config.theme,
-  () => props.log(t.value.logTheme(state.config.theme)),
+  () => addLog(t.value.logTheme(state.config.theme)),
 )
 
 const view = makeView([
@@ -44,14 +43,14 @@ const actions = computed(() => [
     label: t.value.setTheme,
     run: () => {
       state.config.theme = 'dark'
-      props.log(t.value.logNoWatch)
+      addLog(t.value.logNoWatch)
     },
   },
   {
     label: t.value.replace,
     run: () => {
       state.config = { theme: 'neon' }
-      props.log(t.value.logReplace)
+      addLog(t.value.logReplace)
     },
   },
 ])

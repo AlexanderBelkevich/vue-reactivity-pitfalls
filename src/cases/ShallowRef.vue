@@ -1,11 +1,10 @@
 <script setup>
 import { computed, shallowRef, triggerRef, watch } from 'vue'
 import { useI18n } from '../i18n.js'
+import { useCases } from '../useCases.js'
 import { makeView } from './utils.js'
 
-const props = defineProps({
-  log: { type: Function, required: true },
-})
+const { addLog } = useCases()
 
 const { locale } = useI18n()
 const t = computed(() =>
@@ -34,7 +33,7 @@ const data = shallowRef({ count: 0 })
 
 watch(
   data,
-  () => props.log(t.value.logWatch(data.value.count)),
+  () => addLog(t.value.logWatch(data.value.count)),
   { deep: true },
 )
 
@@ -47,21 +46,21 @@ const actions = computed(() => [
     label: t.value.noTrigger,
     run: () => {
       data.value.count += 1
-      props.log(t.value.logSilent)
+      addLog(t.value.logSilent)
     },
   },
   {
     label: t.value.trigger,
     run: () => {
       triggerRef(data)
-      props.log(t.value.logTrigger)
+      addLog(t.value.logTrigger)
     },
   },
   {
     label: t.value.replace,
     run: () => {
       data.value = { count: data.value.count + 1 }
-      props.log(t.value.logReplace)
+      addLog(t.value.logReplace)
     },
   },
 ])

@@ -1,11 +1,10 @@
 <script setup>
 import { computed, reactive } from 'vue'
 import { useI18n } from '../i18n.js'
+import { useCases } from '../useCases.js'
 import { makeView } from './utils.js'
 
-const props = defineProps({
-  log: { type: Function, required: true },
-})
+const { addLog } = useCases()
 
 const { locale } = useI18n()
 const t = computed(() =>
@@ -34,14 +33,14 @@ const actions = computed(() => [
     label: 'state.count++',
     run: () => {
       state.count += 1
-      props.log(t.value.logState)
+      addLog(t.value.logState)
     },
   },
   {
     label: 'localCount++',
     run: () => {
       localCount += 1
-      props.log(t.value.logLocal)
+      addLog(t.value.logLocal)
     },
   },
 ])

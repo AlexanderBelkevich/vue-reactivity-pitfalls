@@ -2,11 +2,12 @@
   <div class="case-list">
     <h3>{{ t('case.casesTitle') }}</h3>
     <button
-      v-for="item in cases"
+      v-for="item in caseCards"
       :key="item.id"
       class="case-item"
       :class="{ 'case-item--active': item.id === selectedId }"
-      @click="$emit('select', item.id)"
+      type="button"
+      @click="selectCase(item.id)"
     >
       <span class="case-title">{{ item.title }}</span>
       <span class="case-sub">{{ item.short }}</span>
@@ -16,21 +17,15 @@
 
 <script setup>
 import { useI18n } from '../i18n.js'
-
-defineProps({
-  cases: {
-    type: Array,
-    required: true,
-  },
-  selectedId: {
-    type: String,
-    required: true,
-  },
-})
-
-defineEmits(['select'])
+import { useCases, useCasesProvider } from '../useCases.js'
 
 const { t } = useI18n()
+const { selectedId } = useCasesProvider()
+const { caseCards } = useCases()
+
+const selectCase = (id) => {
+  selectedId.value = id
+}
 </script>
 
 <style scoped>

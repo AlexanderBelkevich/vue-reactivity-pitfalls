@@ -6,17 +6,17 @@
       <div class="lang-toggle">
         <button
           class="lang-btn"
-          :class="{ 'lang-btn--active': modelValue === 'ru' }"
+          :class="{ 'lang-btn--active': locale === 'ru' }"
           type="button"
-          @click="$emit('update:modelValue', 'ru')"
+          @click="setLocale('ru')"
         >
           RU
         </button>
         <button
           class="lang-btn"
-          :class="{ 'lang-btn--active': modelValue === 'en' }"
+          :class="{ 'lang-btn--active': locale === 'en' }"
           type="button"
-          @click="$emit('update:modelValue', 'en')"
+          @click="setLocale('en')"
         >
           EN
         </button>
@@ -38,18 +38,14 @@
 </template>
 
 <script setup>
-import { useI18n } from '../i18n.js'
-
-defineProps({
-  modelValue: {
-    type: String,
-    required: true,
-  },
-})
-
-defineEmits(['update:modelValue'])
+import { useI18n, useLocaleProvider } from '../i18n.js'
 
 const { t } = useI18n()
+const { locale } = useLocaleProvider()
+
+const setLocale = (lang) => {
+  locale.value = lang
+}
 </script>
 
 <style scoped>

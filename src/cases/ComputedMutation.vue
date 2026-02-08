@@ -1,11 +1,10 @@
 <script setup>
 import { computed, reactive, watch } from 'vue'
 import { useI18n } from '../i18n.js'
+import { useCases } from '../useCases.js'
 import { makeView } from './utils.js'
 
-const props = defineProps({
-  log: { type: Function, required: true },
-})
+const { addLog } = useCases()
 
 const { locale } = useI18n()
 const t = computed(() =>
@@ -32,7 +31,7 @@ const safeSorted = computed(() => [...state.list].sort((a, b) => a - b))
 
 watch(
   () => state.list,
-  () => props.log(t.value.logList(state.list)),
+  () => addLog(t.value.logList(state.list)),
   { deep: true },
 )
 
@@ -47,14 +46,14 @@ const actions = computed(() => [
     label: t.value.addFour,
     run: () => {
       state.list.push(4)
-      props.log(t.value.logPush)
+      addLog(t.value.logPush)
     },
   },
   {
     label: t.value.shuffle,
     run: () => {
       state.list = [2, 4, 1, 3]
-      props.log(t.value.logReplace)
+      addLog(t.value.logReplace)
     },
   },
 ])

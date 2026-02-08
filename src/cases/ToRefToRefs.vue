@@ -1,11 +1,10 @@
 <script setup>
 import { computed, reactive, toRef } from 'vue'
 import { useI18n } from '../i18n.js'
+import { useCases } from '../useCases.js'
 import { makeView } from './utils.js'
 
-const props = defineProps({
-  log: { type: Function, required: true },
-})
+const { addLog } = useCases()
 
 const { locale } = useI18n()
 const t = computed(() =>
@@ -36,14 +35,14 @@ const actions = computed(() => [
     label: 'aRef.value++',
     run: () => {
       aRef.value += 1
-      props.log(t.value.logA)
+      addLog(t.value.logA)
     },
   },
   {
     label: 'state.b++',
     run: () => {
       state.b += 1
-      props.log(t.value.logB)
+      addLog(t.value.logB)
     },
   },
 ])

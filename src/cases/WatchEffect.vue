@@ -1,11 +1,10 @@
 <script setup>
 import { computed, reactive, watchEffect } from 'vue'
 import { useI18n } from '../i18n.js'
+import { useCases } from '../useCases.js'
 import { makeView } from './utils.js'
 
-const props = defineProps({
-  log: { type: Function, required: true },
-})
+const { addLog } = useCases()
 
 const { locale } = useI18n()
 const t = computed(() =>
@@ -34,7 +33,7 @@ const state = reactive({
 })
 
 watchEffect(() => {
-  props.log(t.value.logEffect(state.query, state.items.length))
+  addLog(t.value.logEffect(state.query, state.items.length))
 })
 
 const view = makeView([
@@ -47,14 +46,14 @@ const actions = computed(() => [
     label: t.value.setQuery,
     run: () => {
       state.query = 'pinia'
-      props.log(t.value.logQuery)
+      addLog(t.value.logQuery)
     },
   },
   {
     label: t.value.addItem,
     run: () => {
       state.items.push('pinia')
-      props.log(t.value.logPush)
+      addLog(t.value.logPush)
     },
   },
 ])

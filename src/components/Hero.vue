@@ -1,8 +1,8 @@
 <template>
   <header class="hero">
     <div class="hero__text">
-      <h1>{{ ui.title }}</h1>
-      <p>{{ ui.subtitle }}</p>
+      <h1>{{ t('hero.title') }}</h1>
+      <p>{{ t('hero.subtitle') }}</p>
       <div class="lang-toggle">
         <button
           class="lang-btn"
@@ -22,17 +22,15 @@
         </button>
       </div>
       <div class="author">
-        <div class="author__label">{{ ui.authorLabel }}</div>
-        <div class="author__name">
-          {{ modelValue === 'ru' ? 'Александр Белькевич' : 'Alexander Belkevich' }}
-        </div>
+        <div class="author__label">{{ t('hero.authorLabel') }}</div>
+        <div class="author__name">{{ t('hero.authorName') }}</div>
         <a
           class="author__link"
           href="https://t.me/+1_SXM1gq1PE0MTli"
           target="_blank"
           rel="noreferrer"
         >
-          {{ ui.authorLink }}
+          {{ t('hero.authorLink') }}
         </a>
       </div>
     </div>
@@ -40,18 +38,18 @@
 </template>
 
 <script setup>
+import { inject } from 'vue'
+
 defineProps({
   modelValue: {
     type: String,
     required: true,
   },
-  ui: {
-    type: Object,
-    required: true,
-  },
 })
 
 defineEmits(['update:modelValue'])
+
+const t = inject('t')
 </script>
 
 <style scoped>

@@ -1,19 +1,19 @@
 <template>
   <div class="page">
-    <Hero v-model="lang" :ui="ui" />
+    <Hero v-model="lang" />
 
     <main class="layout">
       <section class="panel">
         <CaseList
           :cases="caseCards"
           :selected-id="selectedId"
-          :title="ui.casesTitle"
+          :title="t('case.casesTitle')"
           @select="selectCase"
         />
       </section>
 
       <section class="panel panel--wide">
-        <CaseDetailHeader :case-text="caseText" :plain-label="ui.plainLabel" />
+        <CaseDetailHeader :case-text="caseText" :plain-label="t('case.plainLabel')" />
 
         <div class="case-logic-host" aria-hidden="true">
           <component
@@ -32,7 +32,6 @@
           :view-items="viewItems"
           :actions="actions"
           :lang="lang"
-          :ui="ui"
           :format-value="formatValue"
         />
       </section>
@@ -40,9 +39,9 @@
       <section class="panel">
         <LogPanel
           :logs="logs"
-          :title="ui.logTitle"
-          :hint="ui.logHint"
-          :empty="ui.logEmpty"
+          :title="t('log.title')"
+          :hint="t('log.hint')"
+          :empty="t('log.empty')"
           :locale="lang === 'ru' ? 'ru-RU' : 'en-US'"
         />
       </section>
@@ -51,7 +50,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, provide } from 'vue'
 import CaseList from './components/CaseList.vue'
 import CaseDetailGrid from './components/CaseDetailGrid.vue'
 import CaseDetailHeader from './components/CaseDetailHeader.vue'
@@ -59,60 +58,18 @@ import Hero from './components/Hero.vue'
 import LogPanel from './components/LogPanel.vue'
 import { cases } from './cases'
 import { codeToHtml } from 'shiki'
+import { useI18n } from './i18n.js'
 
 const lang = ref('ru')
+const { t } = useI18n(lang)
+provide('t', t)
+
 const selectedId = ref(cases[0].id)
 const logs = ref([])
 const viewItems = ref([])
 const actions = ref([])
 const highlightedCode = ref('')
 const caseRef = ref(null)
-
-const ui = computed(() => {
-  const labels = {
-    ru: {
-      title: 'Подводные камни реактивности',
-      subtitle:
-        'Небольшая песочница: кликай на действия и смотри, где Vue ведет себя неожиданно.',
-      casesTitle: 'Кейсы',
-      plainLabel: 'По-простому:',
-      actionsTitle: 'Действия',
-      stateTitle: 'Состояние',
-      stepsTitle: 'Как тестировать',
-      expectedLabel: 'Ожидаемо:',
-      codeTitle: 'Код',
-      notesTitle: 'Что важно помнить',
-      termsTitle: 'Термины и ссылки',
-      docsLabel: 'Документация',
-      authorLabel: 'Автор',
-      authorLink: 'Telegram-группа',
-      logTitle: 'Лог реактивности',
-      logHint: 'Первые строки — самые свежие события.',
-      logEmpty: 'Пока пусто. Запусти любое действие.',
-    },
-    en: {
-      title: 'Reactivity Pitfalls',
-      subtitle:
-        'A small playground: click actions and see where Vue behaves unexpectedly.',
-      casesTitle: 'Cases',
-      plainLabel: 'In simple words:',
-      actionsTitle: 'Actions',
-      stateTitle: 'State',
-      stepsTitle: 'How to test',
-      expectedLabel: 'Expected:',
-      codeTitle: 'Code',
-      notesTitle: 'Key takeaways',
-      termsTitle: 'Terms and links',
-      docsLabel: 'Docs',
-      authorLabel: 'Author',
-      authorLink: 'Telegram group',
-      logTitle: 'Reactivity log',
-      logHint: 'Newest events are on top.',
-      logEmpty: 'Nothing yet. Run an action.',
-    },
-  }
-  return labels[lang.value]
-})
 
 const currentCase = computed(() => {
   return cases.find((item) => item.id === selectedId.value) ?? cases[0]
@@ -172,9 +129,10 @@ const formatValue = (value) => {
   if (typeof value === 'number' || typeof value === 'boolean') return String(value)
   if (Array.isArray(value)) {
     const preview = value.slice(0, 6).join(', ')
+    const totalLabel = t.value('common.arrayTotal')
     return value.length > 6
-      ? `[${preview}, …] (${lang.value === 'ru' ? 'всего' : 'total'} ${value.length})`
-      : `[${preview}] (${lang.value === 'ru' ? 'всего' : 'total'} ${value.length})`
+      ? `[${preview}, …] (${totalLabel} ${value.length})`
+      : `[${preview}] (${totalLabel} ${value.length})`
   }
   try {
     return JSON.stringify(value)

@@ -1,23 +1,23 @@
 <template>
   <div class="case-grid">
     <div class="card card--wide">
-      <h3>{{ ui.codeTitle }}</h3>
+      <h3>{{ t('case.codeTitle') }}</h3>
       <div v-html="highlightedCode" class="code"></div>
     </div>
 
     <div class="card card--wide">
-      <h3>{{ ui.stepsTitle }}</h3>
+      <h3>{{ t('case.stepsTitle') }}</h3>
       <ol class="steps">
         <li v-for="step in caseText.steps" :key="step">{{ step }}</li>
       </ol>
       <div class="expected">
-        <span>{{ ui.expectedLabel }}</span>
+        <span>{{ t('case.expectedLabel') }}</span>
         {{ caseText.expected }}
       </div>
     </div>
 
     <div class="card">
-      <h3>{{ ui.actionsTitle }}</h3>
+      <h3>{{ t('case.actionsTitle') }}</h3>
       <div class="actions">
         <button
           v-for="action in actions"
@@ -32,7 +32,7 @@
     </div>
 
     <div class="card">
-      <h3>{{ ui.stateTitle }}</h3>
+      <h3>{{ t('case.stateTitle') }}</h3>
       <ul class="state-list">
         <li v-for="item in viewItems" :key="item.label">
           <span class="state-label">{{ item.label }}</span>
@@ -42,14 +42,14 @@
     </div>
 
     <div class="card">
-      <h3>{{ ui.notesTitle }}</h3>
+      <h3>{{ t('case.notesTitle') }}</h3>
       <ul class="notes">
         <li v-for="note in caseText.notes" :key="note">{{ note }}</li>
       </ul>
     </div>
 
     <div class="card">
-      <h3>{{ ui.termsTitle }}</h3>
+      <h3>{{ t('case.termsTitle') }}</h3>
       <div class="terms">
         <article
           v-for="item in currentCase.terms"
@@ -64,7 +64,7 @@
             target="_blank"
             rel="noreferrer"
           >
-            {{ ui.docsLabel }}
+            {{ t('case.docsLabel') }}
           </a>
         </article>
       </div>
@@ -73,6 +73,8 @@
 </template>
 
 <script setup>
+import { inject } from 'vue'
+
 defineProps({
   caseText: {
     type: Object,
@@ -98,15 +100,13 @@ defineProps({
     type: String,
     required: true,
   },
-  ui: {
-    type: Object,
-    required: true,
-  },
   formatValue: {
     type: Function,
     required: true,
   },
 })
+
+const t = inject('t')
 </script>
 
 <style scoped>

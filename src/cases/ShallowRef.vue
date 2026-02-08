@@ -65,9 +65,8 @@ const actions = computed(() => [
   },
 ])
 
-defineExpose({ view, actions })
 </script>
 
 <template>
-  <div class="case-logic"></div>
+  <slot :view="view" :actions="actions" />
 </template>

@@ -10,14 +10,12 @@
       <section class="panel panel--wide">
         <CaseDetailHeader />
 
-        <div class="case-logic-host" aria-hidden="true">
-          <component
-            :is="currentCase.component"
-            ref="caseRef"
-          />
-        </div>
-
-        <CaseDetailGrid />
+        <component
+          :is="currentCase.component"
+          v-slot="{ actions, view }"
+        >
+          <CaseDetailGrid :actions="actions" :view-items="view" />
+        </component>
       </section>
 
       <section class="panel">
@@ -35,7 +33,7 @@ import Hero from './components/Hero.vue'
 import LogPanel from './components/LogPanel.vue'
 import { useCases } from './useCases.js'
 
-const { currentCase, caseRef } = useCases()
+const { currentCase } = useCases()
 </script>
 
 <style scoped>
@@ -61,15 +59,6 @@ const { currentCase, caseRef } = useCases()
 
 .panel--wide {
   padding: 24px;
-}
-
-.case-logic-host {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
 }
 
 @media (max-width: 980px) {

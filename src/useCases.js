@@ -4,9 +4,6 @@ import { codeToHtml } from 'shiki'
 import { useI18n } from './i18n.js'
 
 const selectedIdRef = ref(cases[0]?.id ?? '')
-const caseRef = ref(null)
-const viewItems = ref([])
-const actions = ref([])
 const highlightedCodeRef = ref('')
 const logsRef = ref([])
 
@@ -22,20 +19,6 @@ watch(selectedIdRef, () => {
   logsRef.value = []
 })
 
-watch(
-  caseRef,
-  (r) => {
-    if (r?.view) {
-      viewItems.value = r.view
-      actions.value = r.actions
-    } else {
-      viewItems.value = []
-      actions.value = []
-    }
-  },
-  { flush: 'post' },
-)
-
 /**
  * Провайдер кейсов: возвращает ref выбранного id для v-model в корне.
  */
@@ -44,9 +27,8 @@ export function useCasesProvider() {
 }
 
 /**
- * Композабл кейсов: currentCase, caseText, caseCards, highlightedCode,
- * caseRef, viewItems, resolvedActions. Зависит от useI18n() для локали.
- * Ref'ы общие (модульный уровень), чтобы привязка caseRef в App обновляла viewItems/actions везде.
+ * Композабл кейсов: currentCase, caseText, caseCards, highlightedCode, logs, addLog.
+ * Зависит от useI18n() для локали. view и actions приходят в CaseDetailGrid через слот кейса.
  */
 export function useCases() {
   const { locale } = useI18n()
@@ -76,20 +58,12 @@ export function useCases() {
     { immediate: true, deep: true },
   )
 
-  const resolvedActions = computed(() => {
-    const a = actions.value
-    return a && typeof a.value !== 'undefined' ? a.value : Array.isArray(a) ? a : []
-  })
-
   return {
     currentCase,
     caseText,
     caseCards,
     selectedId: selectedIdRef,
     highlightedCode: highlightedCodeRef,
-    caseRef,
-    viewItems,
-    resolvedActions,
     logs: logsRef,
     addLog,
   }

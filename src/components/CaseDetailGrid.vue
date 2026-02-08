@@ -20,7 +20,7 @@
       <h3>{{ t('case.actionsTitle') }}</h3>
       <div class="actions">
         <button
-          v-for="action in resolvedActions"
+          v-for="action in actions"
           :key="action.label"
           type="button"
           class="btn"
@@ -73,17 +73,22 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useI18n } from '../i18n.js'
 import { useCases } from '../useCases.js'
 
+const props = defineProps({
+  actions: { type: Array, default: () => [] },
+  viewItems: { type: Array, default: () => [] },
+})
+
 const { t, locale } = useI18n()
-const {
-  caseText,
-  currentCase,
-  highlightedCode,
-  viewItems,
-  resolvedActions,
-} = useCases()
+const { caseText, currentCase, highlightedCode } = useCases()
+
+const actions = computed(() => {
+  const a = props.actions
+  return a && typeof a.value !== 'undefined' ? a.value : Array.isArray(a) ? a : []
+})
 
 const formatValue = (value) => {
   if (value === null) return 'null'

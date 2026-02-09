@@ -1,3 +1,6 @@
+import summaryRu from './summary.ru.md?raw'
+import summaryEn from './summary.en.md?raw'
+
 export default {
   id: 'watch-no-deep',
   short: {
@@ -7,7 +10,7 @@ export default {
   text: {
     ru: {
       title: 'watch без deep',
-      summary: 'watch по объекту без deep реагирует на ссылку, а не на поля.',
+      summary: summaryRu,
       plain: 'Пока ссылка та же, watch молчит. Срабатывает при замене объекта.',
       steps: [
         'Нажми "Добавить skill" — сработает только deep.',
@@ -25,7 +28,7 @@ export default {
     },
     en: {
       title: 'watch without deep',
-      summary: 'watch on an object without deep reacts to the reference, not fields.',
+      summary: summaryEn,
       plain: 'Same reference — watch is silent. It fires on object replacement.',
       steps: [
         'Click "Add skill" — only deep watch fires.',

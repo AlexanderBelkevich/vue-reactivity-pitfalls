@@ -1,3 +1,6 @@
+import summaryRu from './summary.ru.md?raw'
+import summaryEn from './summary.en.md?raw'
+
 export default {
   id: 'destructure-reactive',
   short: {
@@ -7,10 +10,9 @@ export default {
   text: {
     ru: {
       title: 'Деструктуризация reactive',
-      summary:
-        `Сами по себе поля reactive не являются реактивными. Vue отследитвает обращение к полю в reactive, но не само значение которое там хранится. Когда мы используем деструктуризацию, то мы читаем значение, а дальше оно уже не связано с reactive. И если в случае с объектом, его поля останутся реактивными, то извлекая примитивные значения, мы теряем реактивность.`,
+      summary: summaryRu,
       plain:
-        'Если применить деструктуризацию к поляем в reactive, то можно потерять реактивность.',
+        'Если применить деструктуризацию к поляем в \`reactive\`, то можно потерять реактивность.',
       steps: [
         'Нажми "state.count++" и увидишь, что localCount не меняется.',
         'Нажми "localCount++" — state.count останется прежним.',
@@ -30,7 +32,7 @@ export default {
     },
     en: {
       title: 'Destructuring reactive',
-      summary: 'When you destructure a reactive object, the reactive link is lost.',
+      summary: summaryEn,
       plain: 'The value becomes a plain variable and is no longer tied to state.',
       steps: [
         'Click "state.count++" — localCount does not change.',

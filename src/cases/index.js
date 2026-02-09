@@ -1,3 +1,4 @@
+import { markRaw } from 'vue'
 import DestructureReactive from './destructure-reactive/destructure-reactive.vue'
 import destructureReactiveMeta from './destructure-reactive/meta.js'
 import ToRefToRefs from './toref-torefs/toref-torefs.vue'
@@ -16,12 +17,12 @@ import MarkRaw from './mark-raw/mark-raw.vue'
 import markRawMeta from './mark-raw/meta.js'
 
 export const cases = [
-  { ...destructureReactiveMeta, component: DestructureReactive },
-  { ...torefTorefsMeta, component: ToRefToRefs },
-  { ...watchNoDeepMeta, component: WatchNoDeep },
-  { ...watchEffectMeta, component: WatchEffect },
-  { ...computedMutationMeta, component: ComputedMutation },
-  { ...refDestructureMeta, component: RefDestructure },
-  { ...shallowRefMeta, component: ShallowRef },
-  { ...markRawMeta, component: MarkRaw },
+  { ...destructureReactiveMeta, component: markRaw(DestructureReactive) },
+  { ...torefTorefsMeta, component: markRaw(ToRefToRefs) },
+  { ...watchNoDeepMeta, component: markRaw(WatchNoDeep) },
+  { ...watchEffectMeta, component: markRaw(WatchEffect) },
+  { ...computedMutationMeta, component: markRaw(ComputedMutation) },
+  { ...refDestructureMeta, component: markRaw(RefDestructure) },
+  { ...shallowRefMeta, component: markRaw(ShallowRef) },
+  { ...markRawMeta, component: markRaw(MarkRaw) },
 ]

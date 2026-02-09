@@ -1,3 +1,6 @@
+import summaryRu from './summary.ru.md?raw'
+import summaryEn from './summary.en.md?raw'
+
 export default {
   id: 'ref-destructure',
   short: {
@@ -7,7 +10,7 @@ export default {
   text: {
     ru: {
       title: 'Деструктуризация ref',
-      summary: 'Если вытащить поля из ref.value, реактивность тоже теряется.',
+      summary: summaryRu,
       plain: 'Вынул значение — получил снимок. Дальше связи нет.',
       steps: [
         'Нажми "counter.value.value++" — plainValue не изменится.',
@@ -27,7 +30,7 @@ export default {
     },
     en: {
       title: 'Destructuring ref',
-      summary: 'If you destructure ref.value, reactivity is lost too.',
+      summary: summaryEn,
       plain: 'You get a snapshot. After that, there is no link.',
       steps: [
         'Click "counter.value.value++" — plainValue does not change.',

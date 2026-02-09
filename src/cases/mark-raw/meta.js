@@ -1,3 +1,6 @@
+import summaryRu from './summary.ru.md?raw'
+import summaryEn from './summary.en.md?raw'
+
 export default {
   id: 'mark-raw',
   short: {
@@ -7,7 +10,7 @@ export default {
   text: {
     ru: {
       title: 'markRaw',
-      summary: 'markRaw исключает объект из реактивной системы. Полезно, но легко забыть.',
+      summary: summaryRu,
       plain: 'markRaw говорит Vue: "не трогай этот объект". И он не реагирует.',
       steps: [
         'Нажми "theme = dark" — watch не сработает и UI не обновится.',
@@ -25,7 +28,7 @@ export default {
     },
     en: {
       title: 'markRaw',
-      summary: 'markRaw removes an object from the reactive system. Useful but easy to forget.',
+      summary: summaryEn,
       plain: 'markRaw tells Vue: "do not touch this object". And it does not react.',
       steps: [
         'Click "theme = dark" — watch does not fire and UI stays the same.',

@@ -1,3 +1,6 @@
+import summaryRu from './summary.ru.md?raw'
+import summaryEn from './summary.en.md?raw'
+
 export default {
   id: 'watch-effect',
   short: {
@@ -7,7 +10,7 @@ export default {
   text: {
     ru: {
       title: 'watchEffect',
-      summary: 'watchEffect цепляется за всё, что ты прочитал. Часто это лишнее.',
+      summary: summaryRu,
       plain:
         'watchEffect следит за всем, что прочитал внутри функции — иногда слишком много.',
       steps: [
@@ -29,7 +32,7 @@ export default {
     },
     en: {
       title: 'watchEffect',
-      summary: 'watchEffect tracks everything you read. Often that is too much.',
+      summary: summaryEn,
       plain:
         'watchEffect reacts to every value read inside the function, even accidental ones.',
       steps: [

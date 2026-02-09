@@ -1,3 +1,6 @@
+import summaryRu from './summary.ru.md?raw'
+import summaryEn from './summary.en.md?raw'
+
 export default {
   id: 'shallow-ref',
   short: {
@@ -7,7 +10,7 @@ export default {
   text: {
     ru: {
       title: 'shallowRef',
-      summary: 'shallowRef отслеживает замену .value, а не изменения внутри объекта.',
+      summary: summaryRu,
       plain: 'Поля можно менять, но Vue не узнает, пока не сделать triggerRef.',
       steps: [
         'Нажми "count++ (без triggerRef)" — watch молчит.',
@@ -25,7 +28,7 @@ export default {
     },
     en: {
       title: 'shallowRef',
-      summary: 'shallowRef tracks .value replacement, not inner changes.',
+      summary: summaryEn,
       plain: 'You can change fields, but Vue will not know until triggerRef.',
       steps: [
         'Click "count++ (no triggerRef)" — watch stays silent.',

@@ -1,19 +1,23 @@
 <template>
   <header class="case-header">
     <h2>{{ caseText.title }}</h2>
-    <p>{{ caseText.summary }}</p>
-    <div class="plain">
-      {{ t('case.plainLabel') }} {{ caseText.plain }}
-    </div>
+    <MarkdownOut :content="caseText.summary" />
+    <MarkdownOut class="plain" :content="plain" />
   </header>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useI18n } from '../../i18n.js'
 import { useCases } from '../../use-cases.js'
+import MarkdownOut from '../markdown-out.vue';
 
 const { t } = useI18n()
 const { caseText } = useCases()
+
+const plain = computed(() => {
+  return `${t.value('case.plainLabel')} ${caseText.value?.plain ?? ''}`
+})
 </script>
 
 <style scoped>

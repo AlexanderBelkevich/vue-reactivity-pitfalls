@@ -1,3 +1,6 @@
+import summaryRu from './summary.ru.md?raw'
+import summaryEn from './summary.en.md?raw'
+
 export default {
   id: 'computed-mutation',
   short: {
@@ -7,7 +10,7 @@ export default {
   text: {
     ru: {
       title: 'computed с мутирующей логикой',
-      summary: 'Если в computed есть мутации, ты меняешь исходные данные.',
+      summary: summaryRu,
       plain: 'computed должен быть "чистым", а sort() меняет исходный массив.',
       steps: [
         'Сразу после открытия list уже отсортирован — computed его "потрогал".',
@@ -27,7 +30,7 @@ export default {
     },
     en: {
       title: 'computed with mutations',
-      summary: 'If computed mutates data, you change the source itself.',
+      summary: summaryEn,
       plain: 'computed should be pure, but sort() mutates the original array.',
       steps: [
         'Right after opening, list is already sorted — computed touched it.',

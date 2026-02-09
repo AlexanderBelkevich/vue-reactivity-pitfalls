@@ -1,3 +1,6 @@
+import summaryRu from './summary.ru.md?raw'
+import summaryEn from './summary.en.md?raw'
+
 export default {
   id: 'toref-torefs',
   short: {
@@ -7,7 +10,7 @@ export default {
   text: {
     ru: {
       title: 'toRef / toRefs',
-      summary: 'toRef и toRefs сохраняют связь с reactive, деструктуризация — нет.',
+      summary: summaryRu,
       plain: 'toRef связывает переменную с полем объекта. Деструктуризация — копия.',
       steps: [
         'Нажми "aRef.value++" — state.a меняется вместе с aRef.',
@@ -25,7 +28,7 @@ export default {
     },
     en: {
       title: 'toRef / toRefs',
-      summary: 'toRef and toRefs keep the link to reactive, destructuring does not.',
+      summary: summaryEn,
       plain: 'toRef links a variable to a field. Destructuring is just a copy.',
       steps: [
         'Click "aRef.value++" — state.a changes with aRef.',

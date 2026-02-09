@@ -130,7 +130,7 @@ const setTheme = (value) => {
 
 .theme-btn--active {
   background: var(--accent);
-  color: white;
+  color: var(--accent-on);
 }
 
 .lang-btn {
@@ -146,8 +146,8 @@ const setTheme = (value) => {
 
 .lang-btn--active {
   background: var(--accent);
-  color: white;
-  box-shadow: 0 8px 14px rgba(255, 107, 53, 0.25);
+  color: var(--accent-on);
+  box-shadow: 0 8px 14px var(--accent-shadow);
 }
 
 .author {
@@ -156,7 +156,7 @@ const setTheme = (value) => {
   gap: 4px;
   padding: 12px 14px;
   border-radius: 14px;
-  background: #fffdf8;
+  background: var(--card-tint);
   border: 1px solid var(--stroke);
   max-width: 320px;
 }

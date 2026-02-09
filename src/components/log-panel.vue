@@ -57,7 +57,7 @@ const formatTime = (value) => {
 }
 
 .log-item {
-  background: #fdf7ee;
+  background: var(--log-bg);
   border-radius: 10px;
   padding: 10px;
   border: 1px solid var(--stroke);

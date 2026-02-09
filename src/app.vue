@@ -19,14 +19,23 @@
 </template>
 
 <script setup>
+import { watch } from 'vue'
 import CaseList from './components/case-list.vue'
 import Hero from './components/hero.vue'
 import LogPanel from './components/log-panel.vue'
 import { useCases } from './use-cases.js'
 import { useThemeProvider } from './theme.js'
 
-useThemeProvider()
+const { theme } = useThemeProvider()
 const { currentCase } = useCases()
+
+watch(
+  theme,
+  (value) => {
+    document.documentElement.setAttribute('data-theme', value)
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped>

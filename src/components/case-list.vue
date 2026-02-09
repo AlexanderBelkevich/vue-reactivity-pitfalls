@@ -57,14 +57,14 @@ const caseCards = computed(() =>
   padding: 12px;
   border-radius: 12px;
   border: 1px solid transparent;
-  background: #fdfbf6;
+  background: var(--list-item-bg);
   cursor: pointer;
   transition: border 0.15s ease, transform 0.15s ease;
 }
 
 .case-item--active {
   border-color: var(--accent);
-  background: white;
+  background: var(--card);
 }
 
 .case-item:hover {

@@ -84,7 +84,7 @@ function getBlockProps(name) {
   padding: 10px 12px;
   border-left: none;
   border-radius: 12px;
-  background: #fff6e5;
+  background: var(--plain-bg);
   border: 1px solid var(--stroke);
   color: var(--ink);
   font-size: 0.95rem;

@@ -36,7 +36,7 @@ const plain = computed(() => {
 }
 
 .plain {
-  background: #fff6e5;
+  background: var(--plain-bg);
   border: 1px solid var(--stroke);
   border-radius: 12px;
   padding: 10px 12px;

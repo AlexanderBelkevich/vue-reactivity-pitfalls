@@ -40,7 +40,7 @@ defineProps({
 }
 
 .terms__item {
-  background: #fffdf8;
+  background: var(--card-tint);
   border-radius: 12px;
   padding: 12px;
   border: 1px solid var(--stroke);

@@ -43,14 +43,14 @@ const resolvedActions = computed(() => {
   padding: 10px 14px;
   font-weight: 600;
   background: var(--accent);
-  color: white;
+  color: var(--accent-on);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
-  box-shadow: 0 10px 18px rgba(255, 107, 53, 0.25);
+  box-shadow: 0 10px 18px var(--accent-shadow);
 }
 
 .btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 22px rgba(255, 107, 53, 0.32);
+  box-shadow: 0 12px 22px var(--accent-shadow-hover);
 }
 </style>

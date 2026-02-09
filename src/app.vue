@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { watch } from 'vue'
+import { nextTick, watch } from 'vue'
 import CaseList from './components/case-list.vue'
 import Hero from './components/hero.vue'
 import LogPanel from './components/log-panel.vue'
@@ -27,12 +27,30 @@ import { useCases } from './use-cases.js'
 import { useThemeProvider } from './theme.js'
 
 const { theme } = useThemeProvider()
-const { currentCase } = useCases()
+const { currentCase, currentSectionId } = useCases()
 
 watch(
   theme,
   (value) => {
     document.documentElement.setAttribute('data-theme', value)
+  },
+  { immediate: true },
+)
+
+function scrollToSection(id) {
+  if (!id) return
+  const el = document.getElementById(id)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
+watch(
+  [currentCase, currentSectionId],
+  ([, sectionId]) => {
+    if (sectionId) {
+      nextTick(() => scrollToSection(sectionId))
+    }
   },
   { immediate: true },
 )

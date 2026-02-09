@@ -12,9 +12,24 @@ const cases = Object.entries(caseModules)
   .sort((a, b) => a.order - b.order)
   .map((e) => e.case)
 
-function getCaseIdFromHash() {
+/** Путь из hash без ведущего #: например "destructure-reactive" или "toref-torefs/kak-testirovat" */
+function getHashPath() {
   if (typeof location === 'undefined') return ''
   return (location.hash || '').replace(/^#\/?/, '').trim()
+}
+
+/** Первый сегмент пути — id кейса */
+function getCaseIdFromHash() {
+  const path = getHashPath()
+  const segment = path.split('/')[0]?.trim() ?? ''
+  return segment
+}
+
+/** Второй сегмент пути — id подраздела (параграфа) для скролла */
+function getSectionIdFromHash() {
+  const path = getHashPath()
+  const parts = path.split('/').map((p) => p.trim()).filter(Boolean)
+  return parts.length > 1 ? parts[1] : ''
 }
 
 function getCaseFromHash() {
@@ -33,14 +48,22 @@ function ensureCurrentCase() {
     if (typeof location !== 'undefined') {
       location.hash = '#/' + fromHash.id
     }
-  } else if (typeof location !== 'undefined' && !getCaseIdFromHash()) {
+  } else if (typeof location !== 'undefined' && !getHashPath()) {
     location.hash = '#/' + currentCaseRef.value.id
   }
 }
 
+const currentSectionIdRef = ref('')
+
+function applyHashToState() {
+  currentCaseRef.value = getCaseFromHash()
+  currentSectionIdRef.value = getSectionIdFromHash()
+}
+
 if (typeof window !== 'undefined') {
+  currentSectionIdRef.value = getSectionIdFromHash()
   window.addEventListener('hashchange', () => {
-    currentCaseRef.value = getCaseFromHash()
+    applyHashToState()
   })
 }
 
@@ -63,11 +86,13 @@ watch(currentCaseRef, () => {
  */
 export function useCasesProvider() {
   ensureCurrentCase()
-  const selectCase = (caseItem) => {
+  const selectCase = (caseItem, sectionId = '') => {
     const next = caseItem ?? cases[0]
     currentCaseRef.value = next
     if (typeof location !== 'undefined') {
-      location.hash = '#/' + next.id
+      const hash = sectionId ? `#/${next.id}/${sectionId}` : `#/${next.id}`
+      location.hash = hash
+      currentSectionIdRef.value = sectionId
     }
   }
   return { selectCase }
@@ -91,5 +116,9 @@ export function useCases() {
     cases,
     logs: logsRef,
     addLog,
+    currentSectionId: currentSectionIdRef,
+    /** Сформировать hash для перехода к подразделу (без смены кейса) */
+    sectionHash: (sectionId) =>
+      currentCase.value ? `#/${currentCase.value.id}/${sectionId}` : '',
   }
 }

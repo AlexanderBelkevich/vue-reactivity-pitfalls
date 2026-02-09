@@ -8,8 +8,6 @@
       </section>
 
       <section class="panel panel--wide">
-        <CaseDetailHeader />
-
         <component :is="currentCase.component" />
       </section>
 
@@ -22,7 +20,6 @@
 
 <script setup>
 import CaseList from './components/case-list.vue'
-import CaseDetailHeader from './components/case-detail-header.vue'
 import Hero from './components/hero.vue'
 import LogPanel from './components/log-panel.vue'
 import { useCases } from './use-cases.js'

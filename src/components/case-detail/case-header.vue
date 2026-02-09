@@ -9,14 +9,18 @@
 </template>
 
 <script setup>
-import { useI18n } from '../i18n.js'
-import { useCases } from '../use-cases.js'
+import { useI18n } from '../../i18n.js'
+import { useCases } from '../../use-cases.js'
 
 const { t } = useI18n()
 const { caseText } = useCases()
 </script>
 
 <style scoped>
+.case-header {
+  grid-column: 1 / -1;
+}
+
 .case-header h2 {
   font-size: 1.6rem;
   margin-bottom: 8px;

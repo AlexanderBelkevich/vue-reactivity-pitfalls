@@ -4,6 +4,7 @@ import { useI18n } from '../../i18n.js'
 import { useCases } from '../../use-cases.js'
 import { makeView } from '../utils.js'
 import CaseCode from '../../components/case-detail/case-code.vue'
+import CaseHeader from '../../components/case-detail/case-header.vue'
 import CaseSteps from '../../components/case-detail/case-steps.vue'
 import CaseActions from '../../components/case-detail/case-actions.vue'
 import CaseState from '../../components/case-detail/case-state.vue'
@@ -54,6 +55,7 @@ const actions = computed(() => [
 
 <template>
   <div class="case-grid">
+    <CaseHeader />
     <CaseCode :title="t('case.codeTitle')" :code="currentCase.code" />
     <CaseSteps
       :steps-title="t('case.stepsTitle')"

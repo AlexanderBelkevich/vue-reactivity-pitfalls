@@ -2,7 +2,13 @@ import { computed, ref, watch } from 'vue'
 import { cases } from './cases'
 import { useI18n } from './i18n.js'
 
-const currentCaseRef = ref(cases[0])
+const currentCaseRef = ref(undefined)
+
+function ensureCurrentCase() {
+  if (currentCaseRef.value == null) {
+    currentCaseRef.value = cases[0]
+  }
+}
 const logsRef = ref([])
 
 const addLog = (message) => {
@@ -21,6 +27,7 @@ watch(currentCaseRef, () => {
  * Провайдер кейсов: возвращает функцию выбора кейса (принимает объект кейса).
  */
 export function useCasesProvider() {
+  ensureCurrentCase()
   const selectCase = (caseItem) => {
     currentCaseRef.value = caseItem ?? cases[0]
   }
@@ -32,6 +39,7 @@ export function useCasesProvider() {
  * Зависит от useI18n() для локали. Подсветка кода — в case-code.vue.
  */
 export function useCases() {
+  ensureCurrentCase()
   const { locale } = useI18n()
 
   const currentCase = currentCaseRef

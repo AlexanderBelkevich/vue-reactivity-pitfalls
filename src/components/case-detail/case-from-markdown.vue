@@ -1,12 +1,13 @@
 <template>
   <div class="case-grid">
     <template v-for="(segment, i) in segments" :key="i">
-      <!-- md-сегменты: всё из MD (# заголовок, текст, > plain). Первый — на всю ширину -->
+      <!-- md-сегменты: заголовок из card[locale].title, остальное из MD. Первый сегмент — без дублирования # в тексте -->
       <div
         v-if="segment.type === 'md'"
         class="case-md"
       >
-        <MarkdownOut :content="segment.content" />
+        <h2 v-if="i === 0" class="case-md__title">{{ headerTitle }}</h2>
+        <MarkdownOut :content="i === 0 ? firstSegmentBody(segment.content) : segment.content" />
       </div>
       <!-- блок: компонент из реестра, данные из контекста родителя -->
       <component
@@ -19,11 +20,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, toValue } from 'vue'
 import MarkdownOut from '../markdown-out.vue'
 
 const props = defineProps({
-  /** Сырой контент MD: # Заголовок, текст, > plain, затем ::: blockName */
+  /** Сырой контент MD (заголовок # в первом сегменте не показывается — берётся из card). Текст, > plain, ::: blockName */
   content: { type: String, default: '' },
   /** Реестр блоков: { blockName: { component, getProps(ctx) } } */
   blockRegistry: { type: Object, required: true },
@@ -50,6 +51,19 @@ const segments = computed(() => {
   return list
 })
 
+/** Заголовок из card[locale].title (без дублирования в MD) */
+const headerTitle = computed(() => {
+  const caseItem = toValue(props.context.currentCase)
+  const localeVal = toValue(props.context.locale)
+  return caseItem?.card?.[localeVal]?.title ?? ''
+})
+
+/** Убирает первую строку "# Заголовок" из контента первого сегмента */
+function firstSegmentBody(content) {
+  if (!content?.trim()) return ''
+  return content.replace(/^# .+?\n?/, '').trim()
+}
+
 function getBlockProps(name) {
   const reg = props.blockRegistry[name]
   if (!reg?.getProps) return {}
@@ -66,6 +80,11 @@ function getBlockProps(name) {
 
 .case-md {
   grid-column: 1 / -1;
+}
+
+.case-md__title {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
 }
 
 .case-md :deep(h1),

@@ -1,5 +1,3 @@
-# Деструктуризация reactive
-
 > **По-простому:** если применить деструктуризацию к полям в `reactive`, можно потерять реактивность.
 
 ## Код
@@ -106,6 +104,10 @@ localCount2.value++
 console.log(state.count) // 3 ✅
 ```
 
+> Стоит отметить, что `toRefs` обернет **ВСЕ** поля `reactive` объекта в `ref`'ы. Поэтому для больших объектов это может быть не оптимально, особенно если вам нужно извлечь только некоторые поля.
+
+Также важно понимать, что `toRef` полезен не только для работы с `reactive` объектами, но и в целом это мощная утилита для работы с реактивностью. И желательно ознакомиться с ее возможностями и использовать ее в своих проектах при необходимости.
+
 ## Хотим оптимизировать вычисления внутри `computed` / `watchEffect`
 
 Тут предполагается, что вы уже внутри некоторого реактивного контекста, например внутри `computed` или `watchEffect`. И вы осознаете, что доступ к полям `reactive` объекта может быть дорогим (либо вам просто хочется сделать запись короче). В этом случае мы можем использовать деструктуризацию не боясь потерять реактивность. Так как значение будет читаться из `reactive` внутри реактивного контекста и Vue будет отслеживать это обращение.
@@ -181,8 +183,66 @@ store.increment()
 console.log(count.value) // 1 ✅
 ```
 
+## Особый случай
+
+Все описанное выше по большей мере относится когда мы извлекаем примитивные значения из `reactive` объекта. Но есть особый случай, когда мы извлекаем объект из `reactive` объекта.
+
+```javascript
+const state = reactive({ data: { count: 0 } })
+const { data } = state
+
+console.log(data) // { count: 0 }
+state.data.count++
+console.log(data) // { count: 1 } ✅
+```
+
+Как мы видим, `data` остается реактивным и мы можем изменять его значения. И тут вновь никакой магии Vue тут нет, тот же самый принцип, что и с обычным объектом. 
+
+```javascript
+const state = { data: { count: 0 } }
+const { data } = state
+
+console.log(data) // { count: 0 }
+state.data.count++
+console.log(data) // { count: 1 } ✅
+```
+
+Единственное что нужно участь, что объект извлекаемый из `reactive` объекта будет тоже `reactive`-оберткой над объектом.
+
+```javascript
+import { reactive, isReactive } from 'vue'
+const initialState = { data: { count: 0 } }
+const state = reactive(initialState)
+const { data } = state
+
+console.log(isReactive(data)) // ✅
+console.log(isReactive(initialState.data)) // ❌ начальный объект не тронут
+```
+
+И тут важно понимать, что это обертка над объектом и они все еще связаны, просто Vue отслеживает изменения благодаря `reactive`-обертке.
+
+```javascript
+import { reactive, isReactive } from 'vue'
+const initialState = { data: { count: 0 } }
+const state = reactive(initialState)
+const { data } = state
+
+watchEffect(() => {
+  // выводим на каждое изменение в data.count
+  console.log(state.data.count)
+}, { flush: 'sync' })
+
+data.count++ // ✅ выведет 1
+console.log(initialState.data.count) // 1 ✅ они все еще связаны
+initialState.data.count++ // не выведется, так как мы изменили через нереактивный объект
+console.log(initialState.data.count) // 2 ✅ объекты связаны, поэтому изменения отражаются
+```
+
+Ситуация выше выглядит запутанной, но на самом деле все достаточно просто. `reactive` это именно обертка над объектом, а не сам объект. Сам по себе `reactive` ничего не хранит, он лишь отслеживает чтения/записи в объект, а все данные хранятся в обычном объекте.
+
 ## Что важно помнить
 
+- Все описанное выше не магия Vue, а обычная логика работы с JavaScript.
 - Деструктуризация `reactive` дает обычное значение, не `ref`.
 - Если нужна связь — используй `computed`/`toRef`/`toRefs`.
 - Нереактивные переменные "обновляются" только когда кто-то другой вызывает реактивное изменение.
@@ -190,4 +250,6 @@ console.log(count.value) // 1 ✅
 ## Термины и ссылки
 
 - **`reactive()`** — Делает объект реактивным (deep proxy). [Документация](https://vuejs.org/api/reactivity-core.html#reactive)
+- **`toRef()`** — Швейцарский нож для превращения различных данных в `ref`. [Документация](https://vuejs.org/api/reactivity-utilities.html#toref)
 - **`toRefs()`** — Преобразует `reactive` объект в набор `ref` по полям. [Документация](https://vuejs.org/api/reactivity-utilities.html#torefs)
+- **storeToRefs** — Преобразует `pinia`-стор в набор `ref` по полям. [Документация](https://pinia.vuejs.org/api/pinia/functions/storeToRefs.html)

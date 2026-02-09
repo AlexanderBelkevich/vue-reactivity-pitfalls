@@ -1,23 +1,25 @@
 <template>
   <CaseCard wide>
-    <h3>{{ t('case.stepsTitle') }}</h3>
+    <h3>{{ stepsTitle }}</h3>
     <ol class="steps">
-      <li v-for="step in caseText.steps" :key="step">{{ step }}</li>
+      <li v-for="step in steps" :key="step">{{ step }}</li>
     </ol>
     <div class="expected">
-      <span>{{ t('case.expectedLabel') }}</span>
-      {{ caseText.expected }}
+      <span>{{ expectedLabel }}</span>
+      {{ expected }}
     </div>
   </CaseCard>
 </template>
 
 <script setup>
-import { useI18n } from '../../i18n.js'
-import { useCases } from '../../use-cases.js'
 import CaseCard from './case-card.vue'
 
-const { t } = useI18n()
-const { caseText } = useCases()
+defineProps({
+  stepsTitle: { type: String, required: true },
+  steps: { type: Array, default: () => [] },
+  expectedLabel: { type: String, required: true },
+  expected: { type: String, default: '' },
+})
 </script>
 
 <style scoped>

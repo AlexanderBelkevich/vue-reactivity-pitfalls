@@ -1,17 +1,17 @@
 <template>
   <CaseCard wide>
-    <h3>{{ t('case.codeTitle') }}</h3>
+    <h3>{{ title }}</h3>
     <div v-html="highlightedCode" class="code"></div>
   </CaseCard>
 </template>
 
 <script setup>
-import { useI18n } from '../../i18n.js'
-import { useCases } from '../../use-cases.js'
 import CaseCard from './case-card.vue'
 
-const { t } = useI18n()
-const { highlightedCode } = useCases()
+defineProps({
+  title: { type: String, required: true },
+  highlightedCode: { type: String, default: '' },
+})
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <CaseCard>
-    <h3>{{ t('case.stateTitle') }}</h3>
+    <h3>{{ title }}</h3>
     <ul class="state-list">
       <li v-for="item in viewItems" :key="item.label">
         <span class="state-label">{{ item.label }}</span>
@@ -11,14 +11,13 @@
 </template>
 
 <script setup>
-import { useI18n } from '../../i18n.js'
 import CaseCard from './case-card.vue'
 
-defineProps({
+const props = defineProps({
+  title: { type: String, required: true },
   viewItems: { type: Array, default: () => [] },
+  arrayTotalLabel: { type: String, default: '' },
 })
-
-const { t } = useI18n()
 
 const formatValue = (value) => {
   if (value === null) return 'null'
@@ -27,7 +26,7 @@ const formatValue = (value) => {
   if (typeof value === 'number' || typeof value === 'boolean') return String(value)
   if (Array.isArray(value)) {
     const preview = value.slice(0, 6).join(', ')
-    const totalLabel = t.value('common.arrayTotal')
+    const totalLabel = props.arrayTotalLabel
     return value.length > 6
       ? `[${preview}, …] (${totalLabel} ${value.length})`
       : `[${preview}] (${totalLabel} ${value.length})`

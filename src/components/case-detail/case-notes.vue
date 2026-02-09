@@ -1,19 +1,19 @@
 <template>
   <CaseCard>
-    <h3>{{ t('case.notesTitle') }}</h3>
+    <h3>{{ title }}</h3>
     <ul class="notes">
-      <li v-for="note in caseText.notes" :key="note">{{ note }}</li>
+      <li v-for="note in notes" :key="note">{{ note }}</li>
     </ul>
   </CaseCard>
 </template>
 
 <script setup>
-import { useI18n } from '../../i18n.js'
-import { useCases } from '../../use-cases.js'
 import CaseCard from './case-card.vue'
 
-const { t } = useI18n()
-const { caseText } = useCases()
+defineProps({
+  title: { type: String, required: true },
+  notes: { type: Array, default: () => [] },
+})
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <CaseCard>
-    <h3>{{ t('case.actionsTitle') }}</h3>
+    <h3>{{ title }}</h3>
     <div class="actions">
       <button
         v-for="action in resolvedActions"
@@ -17,14 +17,12 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useI18n } from '../../i18n.js'
 import CaseCard from './case-card.vue'
 
 const props = defineProps({
+  title: { type: String, required: true },
   actions: { type: Array, default: () => [] },
 })
-
-const { t } = useI18n()
 
 const resolvedActions = computed(() => {
   const a = props.actions

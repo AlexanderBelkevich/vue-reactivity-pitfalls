@@ -1,9 +1,9 @@
 <template>
   <CaseCard>
-    <h3>{{ t('case.termsTitle') }}</h3>
+    <h3>{{ title }}</h3>
     <div class="terms">
       <article
-        v-for="item in currentCase.terms"
+        v-for="item in terms"
         :key="item.name"
         class="terms__item"
       >
@@ -15,7 +15,7 @@
           target="_blank"
           rel="noreferrer"
         >
-          {{ t('case.docsLabel') }}
+          {{ docsLabel }}
         </a>
       </article>
     </div>
@@ -23,12 +23,14 @@
 </template>
 
 <script setup>
-import { useI18n } from '../../i18n.js'
-import { useCases } from '../../use-cases.js'
 import CaseCard from './case-card.vue'
 
-const { t, locale } = useI18n()
-const { currentCase } = useCases()
+defineProps({
+  title: { type: String, required: true },
+  terms: { type: Array, default: () => [] },
+  docsLabel: { type: String, default: '' },
+  locale: { type: String, default: 'ru' },
+})
 </script>
 
 <style scoped>

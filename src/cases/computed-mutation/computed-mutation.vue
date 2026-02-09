@@ -10,7 +10,7 @@ import CaseState from '../../components/case-detail/case-state.vue'
 import CaseNotes from '../../components/case-detail/case-notes.vue'
 import CaseTerms from '../../components/case-detail/case-terms.vue'
 
-const { addLog, currentCase, caseText, highlightedCode } = useCases()
+const { addLog, currentCase, caseText } = useCases()
 const { t, locale } = useI18n()
 const ui = computed(() => currentCase.value.ui?.[locale.value] ?? {})
 
@@ -56,7 +56,7 @@ const actions = computed(() => [
 
 <template>
   <div class="case-grid">
-    <CaseCode :title="t('case.codeTitle')" :highlighted-code="highlightedCode" />
+    <CaseCode :title="t('case.codeTitle')" :code="currentCase.code" />
     <CaseSteps
       :steps-title="t('case.stepsTitle')"
       :steps="caseText.steps"

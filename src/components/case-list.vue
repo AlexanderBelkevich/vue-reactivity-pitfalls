@@ -5,9 +5,9 @@
       v-for="item in caseCards"
       :key="item.id"
       class="case-item"
-      :class="{ 'case-item--active': item.id === selectedId }"
+      :class="{ 'case-item--active': item.id === currentCase.id }"
       type="button"
-      @click="selectCase(item.id)"
+      @click="selectCase(item.case)"
     >
       <span class="case-title">{{ item.title }}</span>
       <span class="case-sub">{{ item.short }}</span>
@@ -16,16 +16,23 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { cases } from '../cases'
 import { useI18n } from '../i18n.js'
 import { useCases, useCasesProvider } from '../use-cases.js'
 
-const { t } = useI18n()
-const { selectedId } = useCasesProvider()
-const { caseCards } = useCases()
+const { t, locale } = useI18n()
+const { selectCase } = useCasesProvider()
+const { currentCase } = useCases()
 
-const selectCase = (id) => {
-  selectedId.value = id
-}
+const caseCards = computed(() =>
+  cases.map((item) => ({
+    id: item.id,
+    title: item.text[locale.value].title,
+    short: item.short[locale.value],
+    case: item,
+  })),
+)
 </script>
 
 <style scoped>

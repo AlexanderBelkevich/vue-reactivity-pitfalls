@@ -1,3 +1,36 @@
+# Деструктуризация reactive
+
+> **По-простому:** если применить деструктуризацию к полям в `reactive`, можно потерять реактивность.
+
+## Код
+
+```javascript
+const state = reactive({ 
+  count: 0, 
+  object: { deepCount: 1 },
+})
+let { 
+  count: localCount,
+  object: localObject,
+} = state
+
+state.count++ // ✅
+localCount++ // ❌
+```
+
+## Как тестировать
+
+- Нажми "state.count++" и увидишь, что `localCount` не меняется.
+- Нажми "localCount++" — `state.count` останется прежним.
+- Снова "state.count++" — `localCount` обновится из-за ререндера.
+
+Ожидаемо: `localCount` меняется, но UI узнает об этом только при другом ререндере.
+
+::: actions
+::: state
+
+## Почему так происходит?
+
 Сами по себе поля `reactive` не являются реактивными.
 Vue отследитвает обращение к полю в `reactive`, но не само значение которое там хранится.
 Когда мы используем деструктуризацию, то мы читаем значение, а дальше оно уже не связано с `reactive`.
@@ -93,4 +126,68 @@ console.log(doubleCount.value) // 2 ✅
 
 ## Для чего кроме `reactive` описанное выше является верным?
 
+### Пропсы
+
 Достаточно схожая ситуация обстоит пропсами. Особенно до версии `3.5.0`, где была добавлена поддержка деструктуризации пропсов.
+
+```javascript
+// до версии 3.5.0
+const { count } = defineProps({ count: { type: Number, default: 0 } })
+
+// не будет реактивным, так как count будет просто значением, а не ref
+const doubleCount = computed(() => {
+  return count * 2
+})
+```
+
+В версии `3.5.0` была добавлена поддержка деструктуризации пропсов. Однако это синтаксический сахар и специфичен только для `defineProps`.
+
+```javascript
+// начиная с версии 3.5.0
+const { count } = defineProps({ 
+  count: { type: Number, default: 0 }
+})
+
+// будет реактивным, та как компилятор знает о count как о поле props
+const doubleCount = computed(() => {
+  return count * 2 // компилятор преобразует в props.count * 2
+})
+```
+
+Но как и было сказано, это работает только для `defineProps`.
+
+```javascript
+const props = defineProps({ 
+  count: { type: Number, default: 0 }
+})
+const { count } = props // теперь count будет просто значением, а не ref
+
+// не будет реактивным, так как count будет просто значением, а не ref
+const doubleCount = computed(() => {
+  return count * 2
+})
+```
+
+### Для pinia-сторов
+
+Многое сказанное выше схоже с `pinia`-сторами. Однако `pinia` сторы нельзя использовать с `toRefs`, так как это не является оптимальным подходом (у `pinia` объекты сторов имеют более сложную структуру, чем обычные `reactive` объекты). Поэтому `pinia` предоставляет свою собственную функцию `toRefs` для сторов: `storeToRefs`.
+
+```javascript
+const store = useCounterStore()
+const { count } = storeToRefs(store)
+
+console.log(count.value) // 0
+store.increment()
+console.log(count.value) // 1 ✅
+```
+
+## Что важно помнить
+
+- Деструктуризация `reactive` дает обычное значение, не `ref`.
+- Если нужна связь — используй `computed`/`toRef`/`toRefs`.
+- Нереактивные переменные "обновляются" только когда кто-то другой вызывает реактивное изменение.
+
+## Термины и ссылки
+
+- **`reactive()`** — Делает объект реактивным (deep proxy). [Документация](https://vuejs.org/api/reactivity-core.html#reactive)
+- **`toRefs()`** — Преобразует `reactive` объект в набор `ref` по полям. [Документация](https://vuejs.org/api/reactivity-utilities.html#torefs)

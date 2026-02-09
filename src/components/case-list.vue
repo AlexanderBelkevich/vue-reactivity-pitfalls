@@ -17,13 +17,12 @@
 
 <script setup>
 import { computed } from 'vue'
-import { cases } from '../cases'
 import { useI18n } from '../i18n.js'
 import { useCases, useCasesProvider } from '../use-cases.js'
 
 const { t, locale } = useI18n()
 const { selectCase } = useCasesProvider()
-const { currentCase } = useCases()
+const { currentCase, cases } = useCases()
 
 const caseCards = computed(() =>
   cases.map((item) => {

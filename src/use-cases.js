@@ -1,6 +1,16 @@
 import { computed, ref, watch } from 'vue'
-import { cases } from './cases'
 import { useI18n } from './i18n.js'
+
+/**
+ * Сборка списка кейсов через Vite glob. Папки — N.name (например cases/1.destructure-reactive); порядок по N.
+ */
+const caseModules = import.meta.glob('./cases/*/index.js', { eager: true })
+const orderKey = (path) => parseInt(path.match(/\/(\d+)\./)?.[1] ?? '0', 10)
+const cases = Object.entries(caseModules)
+  .map(([path, m]) => ({ order: orderKey(path), case: m.default }))
+  .filter((e) => e.case)
+  .sort((a, b) => a.order - b.order)
+  .map((e) => e.case)
 
 const currentCaseRef = ref(undefined)
 
@@ -49,6 +59,7 @@ export function useCases() {
   return {
     currentCase,
     caseText,
+    cases,
     logs: logsRef,
     addLog,
   }

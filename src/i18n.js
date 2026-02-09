@@ -2,6 +2,21 @@ import { computed, ref } from 'vue'
 
 export const defaultLocale = 'ru'
 
+export const supportedLocales = ['ru', 'en']
+
+function getLocaleFromUrl() {
+  if (typeof location === 'undefined') return null
+  const lang = new URLSearchParams(location.search).get('lang')
+  return supportedLocales.includes(lang) ? lang : null
+}
+
+function setLocaleInUrl(lang) {
+  if (typeof location === 'undefined' || !supportedLocales.includes(lang)) return
+  const url = new URL(location.href)
+  url.searchParams.set('lang', lang)
+  history.replaceState(null, '', url)
+}
+
 export const messages = {
   ru: {
     'hero.title': 'Подводные камни реактивности',
@@ -53,15 +68,26 @@ export const messages = {
   },
 }
 
-// Единый ref локали: создаётся в провайдере, доступен через useLocaleProvider / useI18n
-const localeRef = ref(defaultLocale)
+// Единый ref локали: при загрузке берётся из URL (?lang=), иначе defaultLocale
+const localeRef = ref(
+  typeof location !== 'undefined' ? (getLocaleFromUrl() ?? defaultLocale) : defaultLocale,
+)
+
+if (typeof location !== 'undefined' && !getLocaleFromUrl()) {
+  setLocaleInUrl(localeRef.value)
+}
 
 /**
- * Композабл для корня приложения: возвращает реактивную локаль (ref).
- * Локаль создаётся здесь; корень использует её для v-model переключателя и т.п.
+ * Композабл для корня приложения: возвращает реактивную локаль (ref) и setLocale.
+ * setLocale обновляет локаль и записывает её в URL (?lang=), чтобы сохранялась между запросами.
  */
 export function useLocaleProvider() {
-  return { locale: localeRef }
+  const setLocale = (lang) => {
+    if (!supportedLocales.includes(lang)) return
+    localeRef.value = lang
+    setLocaleInUrl(lang)
+  }
+  return { locale: localeRef, setLocale }
 }
 
 

@@ -64,12 +64,8 @@ import { useI18n, useLocaleProvider } from '../i18n.js'
 import { useThemeProvider } from '../theme.js'
 
 const { t } = useI18n()
-const { locale } = useLocaleProvider()
+const { locale, setLocale } = useLocaleProvider()
 const { theme } = useThemeProvider()
-
-const setLocale = (lang) => {
-  locale.value = lang
-}
 const setTheme = (value) => {
   theme.value = value
 }

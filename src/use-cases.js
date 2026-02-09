@@ -12,13 +12,38 @@ const cases = Object.entries(caseModules)
   .sort((a, b) => a.order - b.order)
   .map((e) => e.case)
 
-const currentCaseRef = ref(undefined)
+function getCaseIdFromHash() {
+  if (typeof location === 'undefined') return ''
+  return (location.hash || '').replace(/^#\/?/, '').trim()
+}
+
+function getCaseFromHash() {
+  const id = getCaseIdFromHash()
+  return cases.find((c) => c.id === id) ?? cases[0]
+}
+
+const currentCaseRef = ref(
+  typeof location !== 'undefined' ? getCaseFromHash() : undefined,
+)
 
 function ensureCurrentCase() {
   if (currentCaseRef.value == null) {
-    currentCaseRef.value = cases[0]
+    const fromHash = getCaseFromHash()
+    currentCaseRef.value = fromHash
+    if (typeof location !== 'undefined') {
+      location.hash = '#/' + fromHash.id
+    }
+  } else if (typeof location !== 'undefined' && !getCaseIdFromHash()) {
+    location.hash = '#/' + currentCaseRef.value.id
   }
 }
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('hashchange', () => {
+    currentCaseRef.value = getCaseFromHash()
+  })
+}
+
 const logsRef = ref([])
 
 const addLog = (message) => {
@@ -39,7 +64,11 @@ watch(currentCaseRef, () => {
 export function useCasesProvider() {
   ensureCurrentCase()
   const selectCase = (caseItem) => {
-    currentCaseRef.value = caseItem ?? cases[0]
+    const next = caseItem ?? cases[0]
+    currentCaseRef.value = next
+    if (typeof location !== 'undefined') {
+      location.hash = '#/' + next.id
+    }
   }
   return { selectCase }
 }

@@ -3,23 +3,45 @@
     <div class="hero__text">
       <h1>{{ t('hero.title') }}</h1>
       <p>{{ t('hero.subtitle') }}</p>
-      <div class="lang-toggle">
-        <button
-          class="lang-btn"
-          :class="{ 'lang-btn--active': locale === 'ru' }"
-          type="button"
-          @click="setLocale('ru')"
-        >
-          RU
-        </button>
-        <button
-          class="lang-btn"
-          :class="{ 'lang-btn--active': locale === 'en' }"
-          type="button"
-          @click="setLocale('en')"
-        >
-          EN
-        </button>
+      <div class="hero__toggles">
+        <div class="lang-toggle">
+          <button
+            class="lang-btn"
+            :class="{ 'lang-btn--active': locale === 'ru' }"
+            type="button"
+            @click="setLocale('ru')"
+          >
+            RU
+          </button>
+          <button
+            class="lang-btn"
+            :class="{ 'lang-btn--active': locale === 'en' }"
+            type="button"
+            @click="setLocale('en')"
+          >
+            EN
+          </button>
+        </div>
+        <div class="theme-toggle">
+          <button
+            class="theme-btn"
+            :class="{ 'theme-btn--active': theme === 'light' }"
+            type="button"
+            @click="setTheme('light')"
+            :aria-label="t('hero.themeLight')"
+          >
+            ☀
+          </button>
+          <button
+            class="theme-btn"
+            :class="{ 'theme-btn--active': theme === 'dark' }"
+            type="button"
+            @click="setTheme('dark')"
+            :aria-label="t('hero.themeDark')"
+          >
+            ☾
+          </button>
+        </div>
       </div>
       <div class="author">
         <div class="author__label">{{ t('hero.authorLabel') }}</div>
@@ -39,12 +61,17 @@
 
 <script setup>
 import { useI18n, useLocaleProvider } from '../i18n.js'
+import { useThemeProvider } from '../theme.js'
 
 const { t } = useI18n()
 const { locale } = useLocaleProvider()
+const { theme } = useThemeProvider()
 
 const setLocale = (lang) => {
   locale.value = lang
+}
+const setTheme = (value) => {
+  theme.value = value
 }
 </script>
 
@@ -73,14 +100,37 @@ const setLocale = (lang) => {
   font-size: 1.05rem;
 }
 
-.lang-toggle {
+.hero__toggles {
   margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.lang-toggle,
+.theme-toggle {
   display: inline-flex;
   gap: 8px;
   background: var(--card);
   padding: 6px;
   border-radius: 999px;
   border: 1px solid var(--stroke);
+}
+
+.theme-btn {
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.theme-btn--active {
+  background: var(--accent);
+  color: white;
 }
 
 .lang-btn {

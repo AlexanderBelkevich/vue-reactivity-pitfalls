@@ -6,16 +6,18 @@
 import { ref, watch } from 'vue'
 import { createMarkdownExit } from 'markdown-exit'
 import { codeToHtml } from 'shiki'
+import { useTheme, shikiThemeName } from '../theme.js'
 
 const props = defineProps({
   content: { type: String, default: '' },
 })
 
+const { theme } = useTheme()
 const md = createMarkdownExit({
   highlight(code, lang) {
     return codeToHtml(code, {
       lang: lang || 'text',
-      theme: 'vitesse-dark',
+      theme: shikiThemeName(theme.value),
     })
   },
 })
@@ -23,8 +25,8 @@ const md = createMarkdownExit({
 const rendered = ref('')
 
 watch(
-  () => props.content,
-  async (content) => {
+  [() => props.content, theme],
+  async ([content]) => {
     if (!content?.trim()) {
       rendered.value = ''
       return
@@ -94,8 +96,7 @@ watch(
 }
 
 .markdown-body :deep(pre.shiki) {
-  background: #0d0f12;
-  border-color: transparent;
+  border-color: var(--stroke);
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;
 }

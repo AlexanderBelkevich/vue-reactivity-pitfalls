@@ -10,7 +10,7 @@
       @click="selectCase(item.case)"
     >
       <span class="case-title">{{ item.title }}</span>
-      <span class="case-sub">{{ item.short }}</span>
+      <span class="case-sub">{{ item.description }}</span>
     </button>
   </div>
 </template>
@@ -26,12 +26,15 @@ const { selectCase } = useCasesProvider()
 const { currentCase } = useCases()
 
 const caseCards = computed(() =>
-  cases.map((item) => ({
-    id: item.id,
-    title: item.text[locale.value].title,
-    short: item.short[locale.value],
-    case: item,
-  })),
+  cases.map((item) => {
+    const card = item.card?.[locale.value] ?? {}
+    return {
+      id: item.id,
+      title: card.title ?? item.text?.[locale.value]?.title ?? item.id,
+      description: card.description ?? '',
+      case: item,
+    }
+  }),
 )
 </script>
 

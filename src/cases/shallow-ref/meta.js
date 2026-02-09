@@ -3,9 +3,9 @@ import summaryEn from './summary.en.md?raw'
 
 export default {
   id: 'shallow-ref',
-  short: {
-    ru: 'внутри не отслеживается',
-    en: 'inner changes ignored',
+  card: {
+    ru: { title: 'shallowRef', description: 'внутри не отслеживается' },
+    en: { title: 'shallowRef', description: 'inner changes ignored' },
   },
   text: {
     ru: {

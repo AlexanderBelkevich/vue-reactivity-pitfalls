@@ -3,9 +3,9 @@ import summaryEn from './summary.en.md?raw'
 
 export default {
   id: 'destructure-reactive',
-  short: {
-    ru: 'теряем реактивность',
-    en: 'reactivity is lost',
+  card: {
+    ru: { title: 'Деструктуризация reactive', description: 'теряем реактивность' },
+    en: { title: 'Destructuring reactive', description: 'reactivity is lost' },
   },
   text: {
     ru: { summary: summaryRu },

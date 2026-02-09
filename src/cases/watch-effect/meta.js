@@ -3,9 +3,9 @@ import summaryEn from './summary.en.md?raw'
 
 export default {
   id: 'watch-effect',
-  short: {
-    ru: 'лишние триггеры',
-    en: 'extra triggers',
+  card: {
+    ru: { title: 'watchEffect', description: 'лишние триггеры' },
+    en: { title: 'watchEffect', description: 'extra triggers' },
   },
   text: {
     ru: {

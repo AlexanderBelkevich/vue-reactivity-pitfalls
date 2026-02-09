@@ -3,9 +3,9 @@ import summaryEn from './summary.en.md?raw'
 
 export default {
   id: 'computed-mutation',
-  short: {
-    ru: 'sort() меняет источник',
-    en: 'sort() mutates source',
+  card: {
+    ru: { title: 'computed с мутирующей логикой', description: 'sort() меняет источник' },
+    en: { title: 'computed with mutations', description: 'sort() mutates source' },
   },
   text: {
     ru: {

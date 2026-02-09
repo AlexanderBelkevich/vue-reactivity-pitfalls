@@ -3,9 +3,9 @@ import summaryEn from './summary.en.md?raw'
 
 export default {
   id: 'ref-destructure',
-  short: {
-    ru: 'value превращается в копию',
-    en: 'value becomes a copy',
+  card: {
+    ru: { title: 'Деструктуризация ref', description: 'value превращается в копию' },
+    en: { title: 'Destructuring ref', description: 'value becomes a copy' },
   },
   text: {
     ru: {

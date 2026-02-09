@@ -3,9 +3,9 @@ import summaryEn from './summary.en.md?raw'
 
 export default {
   id: 'toref-torefs',
-  short: {
-    ru: 'спасти реактивность',
-    en: 'keep it reactive',
+  card: {
+    ru: { title: 'toRef / toRefs', description: 'спасти реактивность' },
+    en: { title: 'toRef / toRefs', description: 'keep it reactive' },
   },
   text: {
     ru: {

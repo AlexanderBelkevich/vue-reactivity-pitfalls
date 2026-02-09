@@ -3,9 +3,9 @@ import summaryEn from './summary.en.md?raw'
 
 export default {
   id: 'watch-no-deep',
-  short: {
-    ru: 'не видит вложенность',
-    en: 'misses nested changes',
+  card: {
+    ru: { title: 'watch без deep', description: 'не видит вложенность' },
+    en: { title: 'watch without deep', description: 'misses nested changes' },
   },
   text: {
     ru: {

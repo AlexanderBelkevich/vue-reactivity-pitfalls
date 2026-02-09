@@ -3,9 +3,9 @@ import summaryEn from './summary.en.md?raw'
 
 export default {
   id: 'mark-raw',
-  short: {
-    ru: 'объект без реактивности',
-    en: 'object is raw',
+  card: {
+    ru: { title: 'markRaw', description: 'объект без реактивности' },
+    en: { title: 'markRaw', description: 'object is raw' },
   },
   text: {
     ru: {
